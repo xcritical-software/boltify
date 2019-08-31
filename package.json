@@ -7,7 +7,7 @@
   "author": "Mikhail Andreev <tundraray@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "test": "exit 0",
+    "test": "jest --config=jest.config.js",
     "lint": "eslint --ext .js --ext .ts src",
     "lint:fix": "npm run lint -- --fix",
     "compile": "gulp --cwd . compile",
@@ -21,9 +21,19 @@
   "dependencies": {
     "@xcritical/eslint-plugin-xc-front-lint": "latest",
     "@xcritical/xc-front-libs-utils": "latest",
-    "bolt": "^0.23.6"
+    "bolt": "^0.23.6",
+    "execa": "^2.0.4"
   },
   "devDependencies": {
-    "@types/node": "^12.7.3"
+    "@types/node": "^12.7.3",
+    "@types/jest": "^24.0.18",
+    "jest": "^24.9.0",
+    "jest-teamcity-reporter": "^0.9.0",
+    "ts-jest": "^24.0.2"
+  },
+  "bolt": {
+    "workspaces": [
+      "testWorkspace/*"
+    ]
   }
 }
