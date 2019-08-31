@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "A tool for managing JavaScript projects with multiple packages based on Bolt.",
   "main": "index.js",
-  "repository": "git@github.com:tundraray/monorepo-ci-tools.git",
-  "author": "Mikhail Andreev <tundraray@outlook.com>",
+  "repository": "git@github.com:xcritical-software/monorepo-ci-tools.git",
+  "author": "XCritical Software",
   "license": "MIT",
   "scripts": {
     "test": "jest --config=jest.config.js",

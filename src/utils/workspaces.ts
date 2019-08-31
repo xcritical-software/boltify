@@ -1,36 +1,43 @@
 import * as bolt from 'bolt';
 import path from 'path';
 
-import { getChangedFilesSince } from './git';
+import { getChangedFilesSinceRef } from './git';
+
 
 export async function getWorkspaces(): Promise<IWorkspace[]> {
   const cwd = process.cwd();
-  
-  const allPackages = await bolt.getWorkspaces({ cwd });
+  const project = await bolt.getProject();
+  const projectDir = project.dir;
 
-  const workspaces = (allPackages.map(({ dir, name }) => ({
-    dir,
-    name,
-  })));
+  const allPackages = (await bolt.getWorkspaces({ cwd }))
+    .map(pkg => ({
+      ...pkg,
+      relativeDir: path.relative(projectDir, pkg.dir),
+    }));
 
-  return workspaces;
-};
-
+  return allPackages;
+}
 
 
 export async function getWorkspacesChangedSinceRef(ref: string): Promise<IWorkspace[]> {
-  const cwd = process.cwd();
-  
-  const changedFiles = (await getChangedFilesSince(ref)).map(changedFile => path.join(cwd, changedFile));
-  console.log(changedFiles)
-  const allPackages = await bolt.getWorkspaces({ cwd });
+  const changedFiles = await getChangedFilesSinceRef(ref, true);
+  const allPackages = await getWorkspaces();
 
-  const workspaces = (allPackages.map(({ dir, name }) => ({
-    dir,
-    name,
-  })));
 
-  const changedWorkspaces = workspaces.filter(({ dir }) => changedFiles.cont)
+  const fileNameToPackage = (
+    fileName: string,
+  ): IWorkspace => allPackages
+    .find(pkg => fileName.startsWith(pkg.dir + path.sep));
+  const fileExistsInPackage = (fileName: string): boolean => !!fileNameToPackage(fileName);
 
-  return workspaces;
-};
+  return (
+    changedFiles
+      // ignore deleted files
+      .filter(fileName => fileExistsInPackage(fileName))
+      .map(fileName => fileNameToPackage(fileName))
+      // filter, so that we have only unique packages
+      .filter((pkg, idx, packages) => packages.indexOf(pkg) === idx)
+  );
+
+  // return changedWorkspaces;
+}

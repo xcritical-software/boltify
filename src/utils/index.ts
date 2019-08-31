@@ -1,1 +1,1 @@
-export * from './getWorkspaces';
+export * from './workspaces';

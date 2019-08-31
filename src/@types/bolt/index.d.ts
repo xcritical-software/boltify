@@ -14,8 +14,9 @@ declare module 'bolt' {
   interface IPackage {
     dir: string;
     name: string;
-    config: JSONValue;
+    config: IJSONValue;
   }
 
   function getWorkspaces(opts: IOptions): Promise<IPackage[]>;
+  function getProject(): Promise<IPackage>;
 }
