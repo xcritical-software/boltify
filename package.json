@@ -1,0 +1,29 @@
+{
+  "name": "monorepo-ci-tools",
+  "version": "0.0.1",
+  "description": "A tool for managing JavaScript projects with multiple packages based on Bolt.",
+  "main": "index.js",
+  "repository": "git@github.com:tundraray/monorepo-ci-tools.git",
+  "author": "Mikhail Andreev <tundraray@outlook.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "exit 0",
+    "lint": "eslint --ext .js --ext .ts src",
+    "lint:fix": "npm run lint -- --fix",
+    "compile": "gulp --cwd . compile",
+    "build": "npm run clean && npm run compile",
+    "deploy": "cd .publish && npm publish",
+    "check": "npm run lint && npm run test",
+    "clean": "rimraf dist lib .publish",
+    "re-install": "npm run clean && rd /s/q node_modules && yarn"
+  },
+  "private": true,
+  "dependencies": {
+    "@xcritical/eslint-plugin-xc-front-lint": "latest",
+    "@xcritical/xc-front-libs-utils": "latest",
+    "bolt": "^0.23.6"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.3"
+  }
+}
