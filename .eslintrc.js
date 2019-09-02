@@ -1,7 +1,6 @@
 const [{
   rules
 }] = require('@xcritical/eslint-plugin-xc-front-lint/overrides/typescript');
-const path = require('path');
 
 module.exports = {
   extends: ['plugin:@xcritical/eslint-plugin-xc-front-lint/base'],
@@ -18,5 +17,4 @@ module.exports = {
     'import/no-unresolved': 'off'
   },
   plugins: ['@typescript-eslint']
-
 };

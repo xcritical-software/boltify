@@ -1,9 +1,9 @@
 {
-  "name": "monorepo-ci-tools",
+  "name": "@xcritical/mono-ci",
   "version": "0.0.1",
   "description": "A tool for managing JavaScript projects with multiple packages based on Bolt.",
   "main": "index.js",
-  "repository": "git@github.com:xcritical-software/monorepo-ci-tools.git",
+  "repository": "https://github.com/xcritical-software/monorepo-ci-tools.git",
   "author": "XCritical Software",
   "license": "MIT",
   "scripts": {
@@ -17,16 +17,23 @@
     "clean": "rimraf dist lib .publish",
     "re-install": "npm run clean && rd /s/q node_modules && yarn"
   },
+  "bin": {
+    "mono-ci": "./bin.js"
+  },
   "private": true,
   "dependencies": {
-    "@xcritical/eslint-plugin-xc-front-lint": "latest",
-    "@xcritical/xc-front-libs-utils": "latest",
     "bolt": "^0.23.6",
-    "execa": "^2.0.4"
+    "chalk": "^2.4.2",
+    "columnify": "^1.5.4",
+    "execa": "^2.0.4",
+    "meow": "^5.0.0"
   },
   "devDependencies": {
-    "@types/node": "^12.7.3",
     "@types/jest": "^24.0.18",
+    "@types/meow": "^5.0.0",
+    "@types/node": "^12.7.3",
+    "@xcritical/eslint-plugin-xc-front-lint": "latest",
+    "@xcritical/xc-front-libs-utils": "latest",
     "jest": "^24.9.0",
     "jest-teamcity-reporter": "^0.9.0",
     "ts-jest": "^24.0.2"
