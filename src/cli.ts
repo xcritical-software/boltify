@@ -1,5 +1,6 @@
 import meow from 'meow';
 import { commandGetWorkspaces } from './commands';
+import * as logger from './utils/logger';
 
 
 const COMMANDS = {
@@ -13,17 +14,22 @@ const helpMessage = `
     run          run a bolt command inside all workspaces
     workspaces   show projects
   options
-  --changed='direct' Include "direct" dependent packages
+  --since=<branch|tag> Include "direct" dependent packages
 `;
 
 export default async function cli(
-  argv: string[],
+  argv: string[] = [],
   exit = false,
 ): Promise<void> {
-  const { input, flags } = meow({
+  const {
+    pkg,
+    input,
+    flags,
+    showHelp,
+  } = meow(helpMessage, {
     argv,
     help: helpMessage,
-    description: 'Display an array of changed packages since master',
+    description: 'A tool for managing JavaScript projects with multiple packages based on Bolt.',
     flags: {
       changed: {
         type: 'string',
@@ -31,11 +37,24 @@ export default async function cli(
       },
     },
   });
+
+  logger.title(
+    `mono-ci v${pkg.version}`,
+    `(node v${process.versions.node})`,
+    { emoji: '⌚' },
+  );
   const [command, ...commandArgs] = input;
 
   try {
     if (COMMANDS[command]) {
+      logger.cmd([
+        ...input,
+        ...Object.entries(flags)
+          .map(item => `--${item.join('=')}`),
+      ].join(' '));
       await COMMANDS[command](commandArgs, flags);
+    } else {
+      showHelp(0);
     }
   } catch (err) {
     if (exit) {

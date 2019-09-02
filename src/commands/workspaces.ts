@@ -1,14 +1,20 @@
+import chalk from 'chalk';
 import { getWorkspaces, getWorkspacesChangedSinceRef } from '../utils/workspaces';
-import { getRef, trimmedColumns } from '../utils';
+import {
+  getRef,
+  trimmedColumns,
+  write,
+} from '../utils';
 
 
 export async function commandGetWorkspaces(
-  args: string[],
-  { changed }: { [name: string]: any },
+  _args: string[],
+  { since }: { [name: string]: any },
 ): Promise<void> {
   let workspaces: IWorkspace[] = [];
-  if (changed) {
-    const ref = await getRef(changed);
+
+  if (since) {
+    const ref = await getRef(since);
     workspaces = await getWorkspacesChangedSinceRef(ref);
   } else {
     workspaces = await getWorkspaces();
@@ -18,10 +24,9 @@ export async function commandGetWorkspaces(
     const { name, config: { version, description } } = item;
     return {
       name,
-      version,
+      version: chalk.green(`v${version}`),
       description,
     };
   });
-
-  trimmedColumns(workspacesToPrint, ['name', 'version', 'description']);
+  write(trimmedColumns(workspacesToPrint, ['name', 'version', 'description']));
 }
