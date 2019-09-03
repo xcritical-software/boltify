@@ -56,7 +56,7 @@ export default async function cli(
       showHelp(0);
     }
   } catch (err) {
-    console.error(err);
+    logger.write(err.message, null, true);
     if (exit) {
       process.exit(1);
     } else {

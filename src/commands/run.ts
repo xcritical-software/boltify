@@ -4,12 +4,12 @@ import {
   runWorkspaceTasks,
   toWorkspacesRunOptions,
 } from '../utils';
-import { IWorkspace } from '../interfaces';
+import { IWorkspace, IFlags } from '../interfaces';
 
 
 export async function commandRunWorkspaces(
   _args: string[],
-  { since, ...flags }: { [name: string]: any },
+  { since, ...flags }: IFlags,
 ): Promise<void> {
   let workspaces: IWorkspace[] = [];
   const opts = toWorkspacesRunOptions(_args, flags);

@@ -5,12 +5,12 @@ import {
   trimmedColumns,
   write,
 } from '../utils';
-import { IWorkspace } from '../interfaces';
+import { IWorkspace, IFlags } from '../interfaces';
 
 
 export async function commandGetWorkspaces(
   _args: string[],
-  { since, ...flags }: { [name: string]: any },
+  { since, ...flags }: IFlags,
 ): Promise<void> {
   const opts = toWorkspacesRunOptions(_args, flags);
   let workspaces: IWorkspace[] = [];

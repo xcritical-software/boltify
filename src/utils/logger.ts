@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import columnify from 'columnify';
 import chalk from 'chalk';
 
