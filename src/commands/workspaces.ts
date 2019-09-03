@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { getWorkspaces, getWorkspacesChangedSinceRef } from '../utils/workspaces';
+import { getWorkspaces, getWorkspacesChangedSinceRef, toWorkspacesRunOptions } from '../utils/workspaces';
 import {
   getRef,
   trimmedColumns,
@@ -10,22 +10,23 @@ import { IWorkspace } from '../interfaces';
 
 export async function commandGetWorkspaces(
   _args: string[],
-  { since }: { [name: string]: any },
+  { since, ...flags }: { [name: string]: any },
 ): Promise<void> {
+  const opts = toWorkspacesRunOptions(_args, flags);
   let workspaces: IWorkspace[] = [];
 
   if (since) {
     const ref = await getRef(since);
-    workspaces = await getWorkspacesChangedSinceRef(ref);
+    workspaces = await getWorkspacesChangedSinceRef(ref, opts.filterOpts);
   } else {
-    workspaces = await getWorkspaces();
+    workspaces = await getWorkspaces(opts.filterOpts);
   }
 
-  const workspacesToPrint = workspaces.map((item) => {
-    const { name, config: { version, description } } = item;
+  const workspacesToPrint = workspaces.map((item: IWorkspace) => {
+    const { config: { json: { description } } } = item;
     return {
-      name,
-      version: chalk.green(`v${version}`),
+      name: item.getName(),
+      version: chalk.green(`v${item.getVersion()}`),
       description,
     };
   });

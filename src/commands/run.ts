@@ -12,16 +12,17 @@ export async function commandRunWorkspaces(
   { since, ...flags }: { [name: string]: any },
 ): Promise<void> {
   let workspaces: IWorkspace[] = [];
+  const opts = toWorkspacesRunOptions(_args, flags);
 
   if (since) {
     const ref = await getRef(since);
-    workspaces = await getWorkspacesChangedSinceRef(ref);
+    workspaces = await getWorkspacesChangedSinceRef(ref, opts.filterOpts);
   } else {
-    workspaces = await getWorkspaces();
+    workspaces = await getWorkspaces(opts.filterOpts);
   }
 
   return runWorkspaceTasks(
     workspaces,
-    toWorkspacesRunOptions(_args, flags),
+    opts,
   );
 }

@@ -1,4 +1,6 @@
-import { IPackage, ISpawnOpts, IArgs } from 'bolt';
+import {
+  IPackage, ISpawnOpts, IArgs, IFilterOpts,
+} from 'bolt';
 
 
 export interface IFlags { [name: string]: any }
@@ -16,6 +18,7 @@ export interface IWorkspace extends IPackage {
 
 export interface IWorkspacesRunOptions {
   script?: string;
-  scriptArgs: IArgs;
-  spawnOpts: ISpawnOpts;
+  scriptArgs?: IArgs;
+  spawnOpts?: ISpawnOpts;
+  filterOpts?: IFilterOpts;
 }

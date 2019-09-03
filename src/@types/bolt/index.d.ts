@@ -13,10 +13,20 @@ declare module 'bolt' {
     ignoreFs?: string;
   }
 
+
+  export interface IFilterOpts {
+    only?: string;
+    ignore?: string;
+    onlyFs?: string;
+    ignoreFs?: string;
+  }
+
   export interface IPackage {
     dir: string;
     name: string;
     config: IJSONValue;
+    getName: () => string;
+    getVersion: () => string;
   }
 
 

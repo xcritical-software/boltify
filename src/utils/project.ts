@@ -1,24 +1,9 @@
 import * as bolt from 'bolt';
 import * as yarn from 'bolt/dist/modern/utils/yarn';
-import { toSpawnOpts } from 'bolt/dist/modern/utils/options';
 import Project from 'bolt/dist/modern/Project';
 
-import { IWorkspace, IWorkspacesRunOptions, IFlags } from '../interfaces';
+import { IWorkspace, IWorkspacesRunOptions } from '../interfaces';
 
-
-export function toWorkspacesRunOptions(
-  args: bolt.IArgs,
-  flags: IFlags,
-): IWorkspacesRunOptions {
-  const [script, ...scriptArgs] = args;
-  const flagArgs = flags['--'] || [];
-
-  return {
-    script,
-    scriptArgs: [...scriptArgs, ...flagArgs],
-    spawnOpts: toSpawnOpts(flags),
-  };
-}
 
 export async function runWorkspaceTasks(
   workspaces: IWorkspace[],

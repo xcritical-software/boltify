@@ -1,21 +1,51 @@
+import * as bolt from 'bolt';
 import Project from 'bolt/dist/modern/Project';
+import { toSpawnOpts, toFilterOpts } from 'bolt/dist/modern/utils/options';
 import path from 'path';
 
-import { IWorkspace } from '../interfaces';
+
+import { IWorkspace, IFlags, IWorkspacesRunOptions } from '../interfaces';
 import { getChangedFilesSinceRef } from './git';
 
 
-export async function getWorkspaces(): Promise<IWorkspace[]> {
-  const project = await Project.init(process.cwd());
-  const allPackages = await project.getPackages();
+export function toWorkspacesRunOptions(
+  args: bolt.IArgs,
+  flags: IFlags,
+): IWorkspacesRunOptions {
+  const [script, ...scriptArgs] = args;
+  const flagArgs = flags['--'] || [];
 
-  return allPackages;
+  return {
+    script,
+    scriptArgs: [...scriptArgs, ...flagArgs],
+    spawnOpts: toSpawnOpts(flags),
+    filterOpts: toFilterOpts(flags),
+  };
+}
+
+export async function getWorkspaces(
+  opts: bolt.IFilterOpts = {},
+): Promise<IWorkspace[]> {
+  const project = await Project.init(process.cwd());
+  const packages = await project.getPackages();
+
+  const filtered = project.filterPackages(packages, {
+    only: opts.only,
+    ignore: opts.ignore,
+    onlyFs: opts.onlyFs,
+    ignoreFs: opts.ignoreFs,
+  });
+
+  return filtered;
 }
 
 
-export async function getWorkspacesChangedSinceRef(ref: string): Promise<IWorkspace[]> {
+export async function getWorkspacesChangedSinceRef(
+  ref: string,
+  opts: bolt.IFilterOpts = {},
+): Promise<IWorkspace[]> {
   const changedFiles = await getChangedFilesSinceRef(ref, true);
-  const allPackages = await getWorkspaces();
+  const allPackages = await getWorkspaces(opts);
 
 
   const fileNameToPackage = (
