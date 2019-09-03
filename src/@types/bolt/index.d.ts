@@ -3,7 +3,9 @@
 
 declare module 'bolt' {
 
-  interface IOptions {
+  export type ITask = (workspace: IPackage) => Promise<any>;
+  export type IArgs = string[];
+  export interface IOptions {
     cwd?: string;
     only?: string;
     ignore?: string;
@@ -11,10 +13,17 @@ declare module 'bolt' {
     ignoreFs?: string;
   }
 
-  interface IPackage {
+  export interface IPackage {
     dir: string;
     name: string;
     config: IJSONValue;
+  }
+
+
+  interface ISpawnOpts {
+    orderMode?: 'serial' | 'parallel' | 'parallel-nodes';
+    bail?: boolean;
+    // maxConcurrent?: number,
   }
 
   function getWorkspaces(opts: IOptions): Promise<IPackage[]>;

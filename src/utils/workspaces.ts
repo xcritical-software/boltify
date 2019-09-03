@@ -1,19 +1,13 @@
-import * as bolt from 'bolt';
+import Project from 'bolt/dist/modern/Project';
 import path from 'path';
 
+import { IWorkspace } from '../interfaces';
 import { getChangedFilesSinceRef } from './git';
 
 
 export async function getWorkspaces(): Promise<IWorkspace[]> {
-  const cwd = process.cwd();
-  const project = await bolt.getProject();
-  const projectDir = project.dir;
-
-  const allPackages = (await bolt.getWorkspaces({ cwd }))
-    .map(pkg => ({
-      ...pkg,
-      relativeDir: path.relative(projectDir, pkg.dir),
-    }));
+  const project = await Project.init(process.cwd());
+  const allPackages = await project.getPackages();
 
   return allPackages;
 }

@@ -1,26 +1,35 @@
 import meow from 'meow';
-import { commandGetWorkspaces } from './commands';
+import { commandGetWorkspaces, commandRunWorkspaces } from './commands';
 import * as logger from './utils/logger';
 
 
 const COMMANDS = {
   workspaces: commandGetWorkspaces,
+  run: commandRunWorkspaces,
 };
 
 const helpMessage = `
   usage
     $ mono-ci [command] <...args> <...opts>
   commands
-    run          run a bolt command inside all workspaces
-    workspaces   show projects
+    run                run a command inside all workspaces
+    workspaces         show projects
   options
-  --since=<branch|tag> Include "direct" dependent packages
+  --since=<branch|tag> Only include packages that have been updated since the specified ref. 
+                       If no ref is passed, it defaults to the most-recent tag.
 `;
 
 export default async function cli(
   argv: string[] = [],
   exit = false,
 ): Promise<void> {
+  const flagOpts: any = {
+    '--': true,
+    changed: {
+      type: 'string',
+      alias: 'b',
+    },
+  };
   const {
     pkg,
     input,
@@ -30,12 +39,7 @@ export default async function cli(
     argv,
     help: helpMessage,
     description: 'A tool for managing JavaScript projects with multiple packages based on Bolt.',
-    flags: {
-      changed: {
-        type: 'string',
-        alias: 'b',
-      },
-    },
+    flags: flagOpts,
   });
 
   logger.title(
@@ -47,20 +51,17 @@ export default async function cli(
 
   try {
     if (COMMANDS[command]) {
-      logger.cmd([
-        ...input,
-        ...Object.entries(flags)
-          .map(item => `--${item.join('=')}`),
-      ].join(' '));
       await COMMANDS[command](commandArgs, flags);
     } else {
       showHelp(0);
     }
   } catch (err) {
+    console.error(err);
     if (exit) {
       process.exit(1);
     } else {
       throw err;
     }
   }
+  return null;
 }

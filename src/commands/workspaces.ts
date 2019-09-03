@@ -5,6 +5,7 @@ import {
   trimmedColumns,
   write,
 } from '../utils';
+import { IWorkspace } from '../interfaces';
 
 
 export async function commandGetWorkspaces(
