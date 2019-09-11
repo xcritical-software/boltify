@@ -1,0 +1,53 @@
+{
+  "name": "@xcritical/mono-ci",
+  "version": "0.0.4",
+  "description": "A tool for managing JavaScript projects with multiple packages based on Bolt.",
+  "main": "index.js",
+  "repository": "https://github.com/xcritical-software/monorepo-ci-tools.git",
+  "author": "XCritical Software",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --config=jest.config.js",
+    "lint": "eslint --ext .ts src",
+    "lint:fix": "yarn lint --fix",
+    "compile": "gulp --cwd . compile",
+    "build": "yarn clean && yarn compile",
+    "deploy": "cd .publish && yarn publish",
+    "check": "yarn lint && yarn test",
+    "clean": "rimraf dist lib .publish",
+    "re-install": "yarn clean && rd /s/q node_modules && yarn"
+  },
+  "bin": {
+    "mono-ci": "./bin.js"
+  },
+  "private": false,
+  "dependencies": {
+    "bolt": "^0.23.6",
+    "chalk": "^2.4.2",
+    "columnify": "^1.5.4",
+    "execa": "^2.0.4",
+    "lint-staged": "^9.2.5",
+    "meow": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/meow": "^4.0.0",
+    "@types/node": "^12.7.3",
+    "@xcritical/eslint-plugin-xc-front-lint": "latest",
+    "@xcritical/xc-front-libs-utils": "latest",
+    "jest": "^24.9.0",
+    "jest-teamcity-reporter": "^0.9.0",
+    "ts-jest": "^24.0.2"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "yarn lint:fix",
+      "git add"
+    ]
+  },
+  "bolt": {
+    "workspaces": [
+      "testWorkspace/*"
+    ]
+  }
+}
