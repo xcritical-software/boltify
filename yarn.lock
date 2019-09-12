@@ -1296,9 +1296,10 @@
     lodash.unescape "4.0.1"
     semver "^6.3.0"
 
-"@xcritical/eslint-plugin-xc-front-lint@latest":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@xcritical/eslint-plugin-xc-front-lint/-/eslint-plugin-xc-front-lint-1.0.0.tgz#064ea973c5eca4c4aee5876f4cec245905a11f9a"
+"@xcritical/eslint-plugin-xc-front-lint@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@xcritical/eslint-plugin-xc-front-lint/-/eslint-plugin-xc-front-lint-1.0.1.tgz#c321ce2a0462be5ee8c1cbb2f21f63ec0351601a"
+  integrity sha512-SqVW/PpJbl+c0mNgcoGF/ckt2BfKCUeKmTwntXJ+59NWAe6RFHMe64dxK/hpKM8LfhpRc1UyvZvOHBZ/FNFwrw==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^2.0.0"
     "@typescript-eslint/parser" "^2.0.0"
