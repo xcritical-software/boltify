@@ -3,7 +3,9 @@ import {
 } from 'bolt';
 
 
-export interface IFlags { [name: string]: any }
+export interface IFlags {
+  [name: string]: any;
+}
 
 export interface IJSONValue {
   [key: string]: IJSONValue;
