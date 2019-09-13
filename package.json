@@ -15,7 +15,8 @@
     "deploy": "cd .publish && yarn publish",
     "check": "yarn lint && yarn test",
     "clean": "rimraf dist lib .publish",
-    "re-install": "yarn clean && rd /s/q node_modules && yarn"
+    "re-install": "yarn clean && rd /s/q node_modules && yarn",
+    "mono-ci": "node .publish/bin.js"
   },
   "bin": {
     "mono-ci": "./bin.js"
@@ -27,7 +28,10 @@
     "columnify": "^1.5.4",
     "execa": "^2.0.4",
     "lint-staged": "^9.2.5",
-    "meow": "^4.0.0"
+    "meow": "^4.0.0",
+    "p-locate": "^4.1.0",
+    "semantic-release": "^15.13.24",
+    "semver": "^6.3.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
@@ -47,7 +51,8 @@
   },
   "bolt": {
     "workspaces": [
-      "testWorkspace/*"
+      "testWorkspace/*",
+      "testWorkspace2/*"
     ]
   }
 }

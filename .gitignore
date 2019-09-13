@@ -62,3 +62,6 @@ typings/
 
 # publish folder
 .publish
+
+# VS Code folder
+.vscode

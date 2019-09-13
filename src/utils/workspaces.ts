@@ -2,9 +2,13 @@ import * as bolt from 'bolt';
 import Project from 'bolt/dist/modern/Project';
 import { toSpawnOpts, toFilterOpts } from 'bolt/dist/modern/utils/options';
 import path from 'path';
+import { getTags, isRefInHistory } from 'semantic-release/lib/git';
+import pLocate from 'p-locate';
 
 
-import { IWorkspace, IFlags, IWorkspacesRunOptions } from '../interfaces';
+import {
+  IWorkspace, IFlags, IWorkspacesRunOptions, IWorkspaceChange,
+} from '../interfaces';
 import { getChangedFilesSinceRef } from './git';
 
 
@@ -39,6 +43,16 @@ export async function getWorkspaces(
   return filtered;
 }
 
+export const fileNameToPackage = (
+  fileName: string,
+  allPackages: IWorkspace[],
+): IWorkspace => allPackages
+  .find(pkg => fileName.startsWith(pkg.dir + path.sep));
+
+export const fileExistsInPackage = (
+  fileName: string,
+  allPackages: IWorkspace[],
+): boolean => !!fileNameToPackage(fileName, allPackages);
 
 export async function getWorkspacesChangedSinceRef(
   ref: string,
@@ -47,21 +61,40 @@ export async function getWorkspacesChangedSinceRef(
   const changedFiles = await getChangedFilesSinceRef(ref, true);
   const allPackages = await getWorkspaces(opts);
 
-
-  const fileNameToPackage = (
-    fileName: string,
-  ): IWorkspace => allPackages
-    .find(pkg => fileName.startsWith(pkg.dir + path.sep));
-  const fileExistsInPackage = (fileName: string): boolean => !!fileNameToPackage(fileName);
-
   return (
     changedFiles
       // ignore deleted files
-      .filter(fileName => fileExistsInPackage(fileName))
-      .map(fileName => fileNameToPackage(fileName))
+      .filter(fileName => fileExistsInPackage(fileName, allPackages))
+      .map(fileName => fileNameToPackage(fileName, allPackages))
       // filter, so that we have only unique packages
       .filter((pkg, idx, packages) => packages.indexOf(pkg) === idx)
   );
 
   // return changedWorkspaces;
+}
+
+export async function getChangesFromLastTagByWorkspaces(
+  opts: bolt.IFilterOpts = {},
+): Promise<IWorkspaceChange> {
+  const tags = await getTags();
+  const tag = await pLocate(tags, t => isRefInHistory(t), { preserveOrder: true });
+  const changedFiles = await getChangedFilesSinceRef(tag, true);
+  const allPackages = await getWorkspaces(opts);
+  const result = {};
+
+  // changedFiles.forEach((file: string): void => {
+  //   const paths = file.split('/');
+  //   const workspace = paths[0];
+  //   const rest = paths.slice(1).join('/');
+
+  //   if (!result[workspace]) {
+  //     result[workspace] = [];
+  //   }
+
+  //   result[workspace].push(rest);
+  // });
+  console.log(allPackages);
+  console.log('=============');
+  console.log(changedFiles);
+  return result;
 }

@@ -22,3 +22,7 @@ export interface IWorkspacesRunOptions {
   spawnOpts?: ISpawnOpts;
   filterOpts?: IFilterOpts;
 }
+
+export interface IWorkspaceChange {
+  [workspace: string]: string[];
+}

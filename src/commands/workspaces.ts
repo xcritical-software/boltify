@@ -1,11 +1,16 @@
 import chalk from 'chalk';
-import { getWorkspaces, getWorkspacesChangedSinceRef, toWorkspacesRunOptions } from '../utils/workspaces';
+import {
+  getWorkspaces,
+  getWorkspacesChangedSinceRef,
+  toWorkspacesRunOptions,
+  getChangesFromLastTagByWorkspaces,
+} from '../utils/workspaces';
 import {
   getRef,
   trimmedColumns,
   write,
 } from '../utils';
-import { IWorkspace, IFlags } from '../interfaces';
+import { IWorkspace, IFlags, IWorkspaceChange } from '../interfaces';
 
 
 export async function commandGetWorkspaces(
@@ -31,4 +36,22 @@ export async function commandGetWorkspaces(
     };
   });
   write(trimmedColumns(workspacesToPrint, ['name', 'version', 'description']));
+}
+
+export async function commandGetChangesFromLastTagByWorkspaces(): Promise<void> {
+  try {
+    const changesByWorkspace: IWorkspaceChange = await getChangesFromLastTagByWorkspaces();
+
+    const changesToPrint = Object.keys(changesByWorkspace).map((workspace: string) => {
+      const changes = changesByWorkspace[workspace];
+      return {
+        workspace,
+        changes,
+      };
+    });
+
+    write(trimmedColumns(changesToPrint, ['workspace', 'changes']));
+  } catch (error) {
+    write('Error', {}, error);
+  }
 }
