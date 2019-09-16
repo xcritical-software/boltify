@@ -3,6 +3,7 @@ import {
   commandGetWorkspaces,
   commandRunWorkspaces,
   commandGetChangesFromLastTagByWorkspaces,
+  commandGetVersionsByWorkspaces,
 } from './commands';
 import * as logger from './utils/logger';
 
@@ -11,6 +12,7 @@ const COMMANDS = {
   workspaces: commandGetWorkspaces,
   run: commandRunWorkspaces,
   changes: commandGetChangesFromLastTagByWorkspaces,
+  versions: commandGetVersionsByWorkspaces,
 };
 
 const helpMessage = `
@@ -20,6 +22,7 @@ const helpMessage = `
     run                run a command inside all workspaces
     workspaces         show projects
     changes            show changes of files grouped by workspaces
+    versions           get new versions for release by workspaces
   options
   --since=<branch|tag> Only include packages that have been updated since the specified ref. 
                        If no ref is passed, it defaults to the most-recent tag.

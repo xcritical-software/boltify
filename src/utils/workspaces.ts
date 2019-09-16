@@ -4,13 +4,16 @@ import { toSpawnOpts, toFilterOpts } from 'bolt/dist/modern/utils/options';
 import path from 'path';
 import { getTags, isRefInHistory } from 'semantic-release/lib/git';
 import pLocate from 'p-locate';
+import os from 'os';
 
 
 import {
   IWorkspace, IFlags, IWorkspacesRunOptions, IWorkspaceChange,
 } from '../interfaces';
-import { getChangedFilesSinceRef } from './git';
+import { getChangedFilesSinceRef, analyzeCommitsSinceRef } from './git';
 
+
+const isWin = (os.platform() === 'win32');
 
 export function toWorkspacesRunOptions(
   args: bolt.IArgs,
@@ -82,19 +85,27 @@ export async function getChangesFromLastTagByWorkspaces(
   const allPackages = await getWorkspaces(opts);
   const result = {};
 
-  // changedFiles.forEach((file: string): void => {
-  //   const paths = file.split('/');
-  //   const workspace = paths[0];
-  //   const rest = paths.slice(1).join('/');
+  allPackages.forEach((workspace: IWorkspace): void => {
+    const changes = changedFiles.filter(
+      (changeFilePath: string): boolean => changeFilePath.includes(workspace.dir),
+    );
 
-  //   if (!result[workspace]) {
-  //     result[workspace] = [];
-  //   }
+    result[workspace.dir] = changes.map((change: string): string => {
+      const parts = change.split(isWin ? '\\' : '/');
+      return parts[parts.length - 1];
+    });
+  });
 
-  //   result[workspace].push(rest);
-  // });
   console.log(allPackages);
   console.log('=============');
   console.log(changedFiles);
+  console.log('=============');
+  console.log(result);
   return result;
+}
+
+export async function getNextReleasesByWorkspaces(): Promise<void> {
+  const tags = await getTags();
+  const tag = await pLocate(tags, t => isRefInHistory(t), { preserveOrder: true });
+  analyzeCommitsSinceRef(tag);
 }

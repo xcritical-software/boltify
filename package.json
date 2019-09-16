@@ -23,20 +23,24 @@
   },
   "private": false,
   "dependencies": {
+    "@semantic-release/commit-analyzer": "^6.3.0",
     "bolt": "^0.23.6",
     "chalk": "^2.4.2",
     "columnify": "^1.5.4",
     "execa": "^2.0.4",
+    "git-raw-commits": "^2.0.0",
     "lint-staged": "^9.2.5",
     "meow": "^4.0.0",
     "p-locate": "^4.1.0",
     "semantic-release": "^15.13.24",
-    "semver": "^6.3.0"
+    "semver": "^6.3.0",
+    "through2": "^3.0.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
     "@types/meow": "^4.0.0",
     "@types/node": "^12.7.3",
+    "@types/through2": "^2.0.34",
     "@xcritical/eslint-plugin-xc-front-lint": "latest",
     "@xcritical/xc-front-libs-utils": "latest",
     "jest": "^24.9.0",

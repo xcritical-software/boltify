@@ -4,6 +4,7 @@ import {
   getWorkspacesChangedSinceRef,
   toWorkspacesRunOptions,
   getChangesFromLastTagByWorkspaces,
+  getNextReleasesByWorkspaces,
 } from '../utils/workspaces';
 import {
   getRef,
@@ -51,6 +52,16 @@ export async function commandGetChangesFromLastTagByWorkspaces(): Promise<void> 
     });
 
     write(trimmedColumns(changesToPrint, ['workspace', 'changes']));
+  } catch (error) {
+    write('Error', {}, error);
+  }
+}
+
+export async function commandGetVersionsByWorkspaces(): Promise<void> {
+  try {
+    await getNextReleasesByWorkspaces();
+
+    write('commandGetVersionsByWorkspaces');
   } catch (error) {
     write('Error', {}, error);
   }
