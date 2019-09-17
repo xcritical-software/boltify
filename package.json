@@ -27,6 +27,7 @@
     "bolt": "^0.23.6",
     "chalk": "^2.4.2",
     "columnify": "^1.5.4",
+    "conventional-commits-parser": "^3.0.1",
     "execa": "^2.0.4",
     "git-raw-commits": "^2.0.0",
     "lint-staged": "^9.2.5",

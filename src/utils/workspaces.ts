@@ -107,5 +107,5 @@ export async function getChangesFromLastTagByWorkspaces(
 export async function getNextReleasesByWorkspaces(): Promise<void> {
   const tags = await getTags();
   const tag = await pLocate(tags, t => isRefInHistory(t), { preserveOrder: true });
-  analyzeCommitsSinceRef(tag);
+  await analyzeCommitsSinceRef(tag);
 }

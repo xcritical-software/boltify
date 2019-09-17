@@ -1,7 +1,5 @@
 import execa from 'execa';
 import path from 'path';
-import gitRawCommits from 'git-raw-commits';
-import through2 from 'through2';
 
 
 export async function getRef(name: string): Promise<string> {
@@ -45,16 +43,15 @@ export async function getChangedFilesSinceMaster(fullPath = false): Promise<stri
   return getChangedFilesSinceRef(ref, fullPath);
 }
 
-export function analyzeCommitsSinceRef(ref: string): void {
-  const commits: any[] = [];
-  gitRawCommits({
-    from: ref,
-  }).pipe(through2((chunk: any) => {
-    commits.push(chunk);
-  }))
-    .on('finish', (): void => {
-      commits.forEach((commit: any): void => {
-        console.log(commit);
-      });
-    });
+export async function analyzeCommitsSinceRef(ref: string): Promise<void> {
+  const { stdout } = await execa('git', [
+    'log',
+    `${ref}..HEAD`,
+    '--stat',
+    '--name-only',
+    '--format=%B%n------------------------ >8 ------------------------',
+    '--',
+    'testWorkspace2',
+  ]);
+  console.log(stdout);
 }

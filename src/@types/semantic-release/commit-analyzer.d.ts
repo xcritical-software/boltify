@@ -1,4 +1,4 @@
-declare module '@semantic-release/commit-analyzer/lib' {
+declare module '@semantic-release/commit-analyzer/lib/analyze-commit' {
   interface IAngularRule {
     type: string;
     release: string;
@@ -21,5 +21,5 @@ declare module '@semantic-release/commit-analyzer/lib' {
 
   type Rule = IAngularRule | IAtomRule | IESLintRule | IExpressRule;
 
-  export function analyzeCommit(releaseRules: Rule[], commit: any): string;
+  export default function analyzeCommit(releaseRules: Rule[], commit: any): string;
 }
