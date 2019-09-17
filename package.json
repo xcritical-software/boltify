@@ -1,5 +1,5 @@
 {
-  "name": "@xcritical/mono-ci",
+  "name": "@xcritical/boltify",
   "version": "0.0.4",
   "description": "A tool for managing JavaScript projects with multiple packages based on Bolt.",
   "main": "index.js",
