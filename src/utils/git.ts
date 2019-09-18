@@ -1,5 +1,8 @@
 import execa from 'execa';
 import path from 'path';
+import regex from 'conventional-commits-parser/lib/regex.js';
+import parser from 'conventional-commits-parser/lib/parser.js';
+import analyzeCommit from '@semantic-release/commit-analyzer/lib/analyze-commit';
 
 
 export async function getRef(name: string): Promise<string> {
@@ -53,5 +56,40 @@ export async function analyzeCommitsSinceRef(ref: string): Promise<void> {
     '--',
     'testWorkspace2',
   ]);
-  console.log(stdout);
+
+  const options = {
+    headerPattern: /^(\w*)(?:\(([\w$.\-* ]*)\))?: (.*)$/,
+    headerCorrespondence: ['type', 'scope', 'subject'],
+    referenceActions: [
+      'close',
+      'closes',
+      'closed',
+      'fix',
+      'fixes',
+      'fixed',
+      'resolve',
+      'resolves',
+      'resolved',
+      'add',
+      'added',
+    ],
+    issuePrefixes: ['#'],
+    noteKeywords: ['BREAKING CHANGE'],
+    fieldPattern: /^-(.*?)-$/,
+    revertPattern: /^Revert\s"([\s\S]*)"\s*This reverts commit (\w*)\./,
+    revertCorrespondence: ['header', 'hash'],
+    warn: function () {},
+    mergePattern: null as any,
+    mergeCorrespondence: null as any,
+  };
+
+  const releaseRules = [
+    { type: 'feat', release: 'minor' },
+    { type: 'fix', release: 'patch' },
+    { type: 'perf', release: 'patch' },
+  ];
+
+  const parsed = parser(stdout.trim(), options, regex(options));
+  const release = analyzeCommit(releaseRules, parsed);
+  console.log(release);
 }

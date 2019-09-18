@@ -60,8 +60,6 @@ export async function commandGetChangesFromLastTagByWorkspaces(): Promise<void> 
 export async function commandGetVersionsByWorkspaces(): Promise<void> {
   try {
     await getNextReleasesByWorkspaces();
-
-    write('commandGetVersionsByWorkspaces');
   } catch (error) {
     write('Error', {}, error);
   }
