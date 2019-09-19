@@ -89,10 +89,53 @@ export async function analyzeCommitsSinceRef(ref: string, workspace: string): Pr
     { type: '/perf/', release: 'patch' },
   ];
 
-  const parsed = parser(stdout.trim(), options, regex(options));
-  console.log(parsed);
-  const release = analyzeCommit(releaseRules, parsed);
-  console.log(release);
+  try {
+    const parsed = parser(stdout.trim(), options, regex(options));
+    const release = analyzeCommit(releaseRules, parsed);
 
-  return release;
+    return release;
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function getFirstCommitByWorkspaceFolder(
+  workspaceFolder: string,
+): Promise<string> {
+  const { stdout } = await execa('git', [
+    'log',
+    '--reverse',
+    '--pretty=format:%H',
+    '--',
+    workspaceFolder,
+  ]);
+
+  return stdout.split('\n')[0].trim();
+}
+
+export async function getTags({ isRevert }: { isRevert: boolean }): Promise<string[]> {
+  return (await execa('git', ['tag', (isRevert ? '--sort=-refname' : '')])).stdout
+    .split('\n')
+    .map(tag => tag.trim());
+}
+
+export async function isRefInHistory(ref: string) {
+  try {
+    await execa('git', ['merge-base', '--is-ancestor', ref, 'HEAD']);
+    return true;
+  } catch (error) {
+    if (error.code === 1) {
+      return false;
+    }
+
+    throw error;
+  }
+}
+
+export async function addTag(tag: string, message?: string, ref = 'HEAD'): Promise<void> {
+  await execa('git', ['tag', '-a', tag, '-m', (message || tag), ref]);
+}
+
+export async function pushTag(): Promise<void> {
+  await execa('git', ['push', 'origin', '--tags']);
 }

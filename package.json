@@ -29,13 +29,10 @@
     "columnify": "^1.5.4",
     "conventional-commits-parser": "^3.0.1",
     "execa": "^2.0.4",
-    "git-raw-commits": "^2.0.0",
     "lint-staged": "^9.2.5",
     "meow": "^4.0.0",
     "p-locate": "^4.1.0",
-    "semantic-release": "^15.13.24",
-    "semver": "^6.3.0",
-    "through2": "^3.0.1"
+    "semver": "^6.3.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
