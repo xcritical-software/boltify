@@ -28,3 +28,7 @@ export interface IWorkspacesRunOptions {
 export interface IWorkspaceChange {
   [workspace: string]: string[];
 }
+
+export interface IWorkspaceVersion {
+  [workspace: string]: string;
+}
