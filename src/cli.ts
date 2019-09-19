@@ -10,6 +10,7 @@ import * as logger from './utils/logger';
 
 const COMMANDS = {
   workspaces: commandGetWorkspaces,
+  ws: commandGetWorkspaces,
   run: commandRunWorkspaces,
   changes: commandGetChangesFromLastTagByWorkspaces,
   versions: commandGetVersionsByWorkspaces,
