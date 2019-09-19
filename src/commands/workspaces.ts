@@ -6,6 +6,7 @@ import {
   getChangesFromLastTagByWorkspaces,
   getNextVersionsByWorkspaces,
 } from '../utils/workspaces';
+import { addTag, pushTag } from '../utils/git';
 import {
   getRef,
   trimmedColumns,
@@ -57,20 +58,45 @@ export async function commandGetChangesFromLastTagByWorkspaces(): Promise<void> 
   }
 }
 
-export async function commandGetVersionsByWorkspaces(): Promise<void> {
+export async function commandGetVersionsByWorkspaces(
+  _args: string[],
+  { since, push, gitTagVersion, ...flags }: IFlags,
+): Promise<void> {
   try {
-    const versionsByWorkspace: IWorkspaceVersion[] = await getNextVersionsByWorkspaces();
+    const opts = toWorkspacesRunOptions(_args, flags);
+    const workspaces = await getWorkspaces(opts.filterOpts);
+    const versionsByWorkspace: IWorkspaceVersion[] = await getNextVersionsByWorkspaces(workspaces);
 
-    const versionsToPrint = Object.keys(versionsByWorkspace).map((workspace: string) => {
-      const version = versionsByWorkspace[workspace];
-      return {
-        workspace,
-        version,
-      };
+    if (gitTagVersion) {
+      const tags = versionsByWorkspace.map((versionByWorkspace: IWorkspaceVersion) => {
+       const [workspace, version] = Object.entries(versionByWorkspace)[0];
+       return version ? `${workspace}-v${version}` : null;
+      }).filter((tag: string) => tag !== null);
+
+      const promises = tags.map((tag: string): Promise<void> => {
+        return addTag(tag);
+      });
+
+      await Promise.all(promises);
+      
+      if (push && tags.length !== 0) {
+        await pushTag();
+      }
+    }
+
+    const versionsToPrint: any[] = [];
+    versionsByWorkspace.forEach((versionByWorkspace: IWorkspaceVersion): void => {
+      Object.entries(versionByWorkspace).forEach(([workspace, version]: [string, string]): void => {
+        versionsToPrint.push({
+          workspace,
+          version: version || 'No next version',
+        });
+      })
     });
 
     write(trimmedColumns(versionsToPrint, ['workspace', 'version']));
   } catch (error) {
     write('Error', {}, error);
+    console.error(error);
   }
 }
