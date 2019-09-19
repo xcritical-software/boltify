@@ -16,25 +16,33 @@
     "deploy": "yarn pack && yarn publish .publish/*.tgz",
     "check": "yarn lint && yarn test",
     "clean": "rimraf dist lib .publish",
-    "re-install": "yarn clean && rd /s/q node_modules && yarn"
+    "re-install": "yarn clean && rd /s/q node_modules && yarn",
+    "mono-ci": "node .publish/bin.js"
   },
   "bin": {
     "mono-ci": "./bin.js"
   },
   "private": false,
   "dependencies": {
+    "@semantic-release/commit-analyzer": "^6.3.0",
     "bolt": "^0.23.6",
     "chalk": "^2.4.2",
     "columnify": "^1.5.4",
+    "conventional-commits-parser": "^3.0.1",
     "execa": "^2.0.4",
-    "meow": "^4.0.0"
+    "lint-staged": "^9.2.5",
+    "meow": "^4.0.0",
+    "p-locate": "^4.1.0",
+    "semver": "^6.3.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
     "@types/meow": "^4.0.0",
     "@types/node": "^12.7.3",
-    "@xcritical/eslint-plugin-xc-front-lint": "^1.0.1",
-    "@xcritical/xc-front-libs-utils": "^1.0.0",
+    "@types/semver": "^6.0.2",
+    "@types/through2": "^2.0.34",
+    "@xcritical/eslint-plugin-xc-front-lint": "latest",
+    "@xcritical/xc-front-libs-utils": "latest",
     "jest": "^24.9.0",
     "jest-teamcity-reporter": "^0.9.0",
     "ts-jest": "^24.0.2",
@@ -48,7 +56,8 @@
   },
   "bolt": {
     "workspaces": [
-      "testWorkspace/*"
+      "testWorkspace/*",
+      "testWorkspace2/*"
     ]
   }
 }
