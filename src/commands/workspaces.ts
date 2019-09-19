@@ -12,7 +12,9 @@ import {
   trimmedColumns,
   write,
 } from '../utils';
-import { IWorkspace, IFlags, IWorkspaceChange, IWorkspaceVersion } from '../interfaces';
+import {
+  IWorkspace, IFlags, IWorkspaceChange, IWorkspaceVersion,
+} from '../interfaces';
 
 
 export async function commandGetWorkspaces(
@@ -60,7 +62,9 @@ export async function commandGetChangesFromLastTagByWorkspaces(): Promise<void> 
 
 export async function commandGetVersionsByWorkspaces(
   _args: string[],
-  { since, push, gitTagVersion, ...flags }: IFlags,
+  {
+    since, push, gitTagVersion, ...flags
+  }: IFlags,
 ): Promise<void> {
   try {
     const opts = toWorkspacesRunOptions(_args, flags);
@@ -69,16 +73,14 @@ export async function commandGetVersionsByWorkspaces(
 
     if (gitTagVersion) {
       const tags = versionsByWorkspace.map((versionByWorkspace: IWorkspaceVersion) => {
-       const [workspace, version] = Object.entries(versionByWorkspace)[0];
-       return version ? `${workspace}-v${version}` : null;
+        const [workspace, version] = Object.entries(versionByWorkspace)[0];
+        return version ? `${workspace}-v${version}` : null;
       }).filter((tag: string) => tag !== null);
 
-      const promises = tags.map((tag: string): Promise<void> => {
-        return addTag(tag);
-      });
+      const promises = tags.map((tag: string): Promise<void> => addTag(tag));
 
       await Promise.all(promises);
-      
+
       if (push && tags.length !== 0) {
         await pushTag();
       }
@@ -91,7 +93,7 @@ export async function commandGetVersionsByWorkspaces(
           workspace,
           version: version || 'No next version',
         });
-      })
+      });
     });
 
     write(trimmedColumns(versionsToPrint, ['workspace', 'version']));
