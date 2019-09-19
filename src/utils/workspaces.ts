@@ -106,7 +106,7 @@ export async function getChangesFromLastTagByWorkspaces(
 
 async function getNextVersion(
   tags: string[],
-  workspace: IWorkspace
+  workspace: IWorkspace,
 ): Promise<IWorkspaceVersion> {
   const wName = workspace.getName();
   const folderName = workspace.dir.replace(process.cwd() + path.sep, '');
