@@ -84,12 +84,13 @@ export async function analyzeCommitsSinceRef(ref: string): Promise<void> {
   };
 
   const releaseRules = [
-    { type: 'feat', release: 'minor' },
-    { type: 'fix', release: 'patch' },
-    { type: 'perf', release: 'patch' },
+    { type: '/feat/', release: 'minor' },
+    { type: '/fix/', release: 'patch' },
+    { type: '/perf/', release: 'patch' },
   ];
 
   const parsed = parser(stdout.trim(), options, regex(options));
+  console.log(parsed);
   const release = analyzeCommit(releaseRules, parsed);
   console.log(release);
 }
