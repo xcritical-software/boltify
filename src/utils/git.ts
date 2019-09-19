@@ -46,7 +46,7 @@ export async function getChangedFilesSinceMaster(fullPath = false): Promise<stri
   return getChangedFilesSinceRef(ref, fullPath);
 }
 
-export async function analyzeCommitsSinceRef(ref: string): Promise<void> {
+export async function analyzeCommitsSinceRef(ref: string, workspace: string): Promise<string> {
   const { stdout } = await execa('git', [
     'log',
     `${ref}..HEAD`,
@@ -54,7 +54,7 @@ export async function analyzeCommitsSinceRef(ref: string): Promise<void> {
     '--name-only',
     '--format=%B%n------------------------ >8 ------------------------',
     '--',
-    'testWorkspace2',
+    workspace,
   ]);
 
   const options = {
@@ -93,4 +93,6 @@ export async function analyzeCommitsSinceRef(ref: string): Promise<void> {
   console.log(parsed);
   const release = analyzeCommit(releaseRules, parsed);
   console.log(release);
+
+  return release;
 }

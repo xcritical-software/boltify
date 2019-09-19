@@ -4,14 +4,14 @@ import {
   getWorkspacesChangedSinceRef,
   toWorkspacesRunOptions,
   getChangesFromLastTagByWorkspaces,
-  getNextReleasesByWorkspaces,
+  getNextVersionsByWorkspaces,
 } from '../utils/workspaces';
 import {
   getRef,
   trimmedColumns,
   write,
 } from '../utils';
-import { IWorkspace, IFlags, IWorkspaceChange } from '../interfaces';
+import { IWorkspace, IFlags, IWorkspaceChange, IWorkspaceVersion } from '../interfaces';
 
 
 export async function commandGetWorkspaces(
@@ -59,7 +59,17 @@ export async function commandGetChangesFromLastTagByWorkspaces(): Promise<void> 
 
 export async function commandGetVersionsByWorkspaces(): Promise<void> {
   try {
-    await getNextReleasesByWorkspaces();
+    const versionsByWorkspace: IWorkspaceVersion[] = await getNextVersionsByWorkspaces();
+
+    const versionsToPrint = Object.keys(versionsByWorkspace).map((workspace: string) => {
+      const version = versionsByWorkspace[workspace];
+      return {
+        workspace,
+        version,
+      };
+    });
+
+    write(trimmedColumns(versionsToPrint, ['workspace', 'version']));
   } catch (error) {
     write('Error', {}, error);
   }

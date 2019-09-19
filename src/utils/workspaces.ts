@@ -5,10 +5,11 @@ import path from 'path';
 import { getTags, isRefInHistory } from 'semantic-release/lib/git';
 import pLocate from 'p-locate';
 import os from 'os';
+import semver from 'semver';
 
 
 import {
-  IWorkspace, IFlags, IWorkspacesRunOptions, IWorkspaceChange,
+  IWorkspace, IFlags, IWorkspacesRunOptions, IWorkspaceChange, IWorkspaceVersion,
 } from '../interfaces';
 import { getChangedFilesSinceRef, analyzeCommitsSinceRef } from './git';
 
@@ -104,8 +105,19 @@ export async function getChangesFromLastTagByWorkspaces(
   return result;
 }
 
-export async function getNextReleasesByWorkspaces(): Promise<void> {
+export async function getNextVersionsByWorkspaces(
+  opts: bolt.IFilterOpts = {},
+): Promise<IWorkspaceVersion[]> {
   const tags = await getTags();
   const tag = await pLocate(tags, t => isRefInHistory(t), { preserveOrder: true });
-  await analyzeCommitsSinceRef(tag);
+  const workspaces = await getWorkspaces(opts);
+  const result: IWorkspaceVersion[] = [];
+  
+  workspaces.forEach(async (workspace: IWorkspace) => {
+    const wName = workspace.getName();
+    const releaseType = await analyzeCommitsSinceRef(tag, wName);
+    result[wName] = semver.inc(tag, releaseType as semver.ReleaseType);
+  });
+
+  return result;
 }

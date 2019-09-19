@@ -41,6 +41,7 @@
     "@types/jest": "^24.0.18",
     "@types/meow": "^4.0.0",
     "@types/node": "^12.7.3",
+    "@types/semver": "^6.0.2",
     "@types/through2": "^2.0.34",
     "@xcritical/eslint-plugin-xc-front-lint": "latest",
     "@xcritical/xc-front-libs-utils": "latest",
