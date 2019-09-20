@@ -19,11 +19,19 @@ describe('This is the tests for the workspaces command', () => {
 
 
   test('cli since master', async () => {
-    await cli(['workspaces', '--since=master']);
+    try {
+      await cli(['workspaces', '--since=master']);
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
   });
 
   test('cli since master', async () => {
-    await cli(['run', 'test', '--since=master']);
+    try {
+      await cli(['run', 'test', '--since=master']);
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
   });
 
   test('cli since master', async () => {
