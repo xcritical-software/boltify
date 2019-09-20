@@ -19,7 +19,7 @@ describe('This is the tests for the workspaces utils', (): void => {
       const result: IWorkspace[] = await getWorkspacesChangedSinceRef(ref);
       expect(result).toHaveLength(2);
     } catch (error) {
-      expect(error).toEqual('Error: Current ref is undefined');
+      expect(error).toBeDefined();
     }
   });
 
