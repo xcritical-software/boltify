@@ -4,16 +4,14 @@ import {
   getWorkspacesChangedSinceRef,
   toWorkspacesRunOptions,
   getChangesFromLastTagByWorkspaces,
-  getNextVersionsByWorkspaces,
 } from '../utils/workspaces';
-import { addTag, pushTag } from '../utils/git';
 import {
   getRef,
   trimmedColumns,
   write,
 } from '../utils';
 import {
-  IWorkspace, IFlags, IWorkspaceChange, IWorkspaceVersion,
+  IWorkspace, IFlags, IWorkspaceChange,
 } from '../interfaces';
 
 
@@ -57,48 +55,5 @@ export async function commandGetChangesFromLastTagByWorkspaces(): Promise<void> 
     write(trimmedColumns(changesToPrint, ['workspace', 'changes']));
   } catch (error) {
     write('Error', {}, error);
-  }
-}
-
-export async function commandGetVersionsByWorkspaces(
-  _args: string[],
-  {
-    since, push, gitTagVersion, ...flags
-  }: IFlags,
-): Promise<void> {
-  try {
-    const opts = toWorkspacesRunOptions(_args, flags);
-    const workspaces = await getWorkspaces(opts.filterOpts);
-    const versionsByWorkspace: IWorkspaceVersion[] = await getNextVersionsByWorkspaces(workspaces);
-
-    if (gitTagVersion) {
-      const tags = versionsByWorkspace.map((versionByWorkspace: IWorkspaceVersion) => {
-        const [workspace, version] = Object.entries(versionByWorkspace)[0];
-        return version ? `${workspace}-v${version}` : null;
-      }).filter((tag: string) => tag !== null);
-
-      const promises = tags.map((tag: string): Promise<void> => addTag(tag));
-
-      await Promise.all(promises);
-
-      if (push && tags.length !== 0) {
-        await pushTag();
-      }
-    }
-
-    const versionsToPrint: any[] = [];
-    versionsByWorkspace.forEach((versionByWorkspace: IWorkspaceVersion): void => {
-      Object.entries(versionByWorkspace).forEach(([workspace, version]: [string, string]): void => {
-        versionsToPrint.push({
-          workspace,
-          version: version || 'No next version',
-        });
-      });
-    });
-
-    write(trimmedColumns(versionsToPrint, ['workspace', 'version']));
-  } catch (error) {
-    write('Error', {}, error);
-    console.error(error);
   }
 }
