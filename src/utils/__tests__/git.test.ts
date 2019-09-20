@@ -27,8 +27,12 @@ describe('This is the tests for the git utils', () => {
   });
 
   test('getChangedFilesSinceMaster checking', async () => {
-    const result = await getChangedFilesSinceMaster(true);
-    expect(result).toBeDefined();
+    try {
+      const result = await getChangedFilesSinceMaster(true);
+      expect(result).toBeDefined();
+    } catch (error) {
+      expect(error).toEqual('Error: Current ref is undefined');
+    }
   });
 
   test('getLatestTag checking', async () => {
@@ -47,8 +51,12 @@ describe('This is the tests for the git utils', () => {
   });
 
   test('isRefInHistory checking', async () => {
-    const ref = await getMasterRef();
-    const result = await isRefInHistory(ref);
-    expect(result).toEqual(true);
+    try {
+      const ref = await getMasterRef();
+      const result = await isRefInHistory(ref);
+      expect(result).toEqual(true);
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
   });
 });

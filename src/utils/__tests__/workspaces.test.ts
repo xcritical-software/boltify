@@ -14,9 +14,13 @@ describe('This is the tests for the workspaces utils', (): void => {
   });
 
   test('getWorkspacesChangedSinceRef checking', async () => {
-    const ref: string = await getMasterRef();
-    const result: IWorkspace[] = await getWorkspacesChangedSinceRef(ref);
-    expect(result).toHaveLength(2);
+    try {
+      const ref: string = await getMasterRef();
+      const result: IWorkspace[] = await getWorkspacesChangedSinceRef(ref);
+      expect(result).toHaveLength(2);
+    } catch (error) {
+      expect(error).toEqual('Error: Current ref is undefined');
+    }
   });
 
   test('getChangesFromLastTagByWorkspaces checking', async () => {
