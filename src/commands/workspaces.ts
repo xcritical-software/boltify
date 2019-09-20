@@ -19,25 +19,30 @@ export async function commandGetWorkspaces(
   _args: string[],
   { since, ...flags }: IFlags,
 ): Promise<void> {
-  const opts = toWorkspacesRunOptions(_args, flags);
-  let workspaces: IWorkspace[] = [];
+  try {
+    const opts = toWorkspacesRunOptions(_args, flags);
+    let workspaces: IWorkspace[] = [];
 
-  if (since) {
-    const ref = await getRef(since);
-    workspaces = await getWorkspacesChangedSinceRef(ref, opts.filterOpts);
-  } else {
-    workspaces = await getWorkspaces(opts.filterOpts);
+    if (since) {
+      const ref = await getRef(since);
+      workspaces = await getWorkspacesChangedSinceRef(ref, opts.filterOpts);
+    } else {
+      workspaces = await getWorkspaces(opts.filterOpts);
+    }
+
+    const workspacesToPrint = workspaces.map((item: IWorkspace) => {
+      const { config: { json: { description } } } = item;
+      return {
+        name: item.getName(),
+        version: chalk.green(`v${item.getVersion()}`),
+        description,
+      };
+    });
+
+    write(trimmedColumns(workspacesToPrint, ['name', 'version', 'description']));
+  } catch (error) {
+    write('Error', {}, error);
   }
-
-  const workspacesToPrint = workspaces.map((item: IWorkspace) => {
-    const { config: { json: { description } } } = item;
-    return {
-      name: item.getName(),
-      version: chalk.green(`v${item.getVersion()}`),
-      description,
-    };
-  });
-  write(trimmedColumns(workspacesToPrint, ['name', 'version', 'description']));
 }
 
 export async function commandGetChangesFromLastTagByWorkspaces(): Promise<void> {
