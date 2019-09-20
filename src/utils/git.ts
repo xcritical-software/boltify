@@ -32,7 +32,7 @@ export async function getChangedFilesSinceRef(
   fullPath = false,
 ): Promise<string[]> {
   if (ref === null) {
-    throw Error('Error: Current ref is undefined');
+    throw Error('Current ref is undefined');
   }
 
   // First we need to find the commit where we diverged from `ref` at using `git merge-base`
