@@ -2,11 +2,20 @@ import * as bolt from 'bolt';
 import Project from 'bolt/dist/modern/Project';
 import { toSpawnOpts, toFilterOpts } from 'bolt/dist/modern/utils/options';
 import path from 'path';
+import pLocate from 'p-locate';
+import os from 'os';
+
+import {
+  IWorkspace, IFlags, IWorkspacesRunOptions, IWorkspaceChange,
+} from '../interfaces';
+import {
+  getChangedFilesSinceRef,
+  getTags,
+  isRefInHistory,
+} from './git';
 
 
-import { IWorkspace, IFlags, IWorkspacesRunOptions } from '../interfaces';
-import { getChangedFilesSinceRef } from './git';
-
+const isWin = (os.platform() === 'win32');
 
 export function toWorkspacesRunOptions(
   args: bolt.IArgs,
@@ -39,6 +48,16 @@ export async function getWorkspaces(
   return filtered;
 }
 
+export const fileNameToPackage = (
+  fileName: string,
+  allPackages: IWorkspace[],
+): IWorkspace => allPackages
+  .find(pkg => fileName.startsWith(pkg.dir + path.sep));
+
+export const fileExistsInPackage = (
+  fileName: string,
+  allPackages: IWorkspace[],
+): boolean => !!fileNameToPackage(fileName, allPackages);
 
 export async function getWorkspacesChangedSinceRef(
   ref: string,
@@ -47,21 +66,40 @@ export async function getWorkspacesChangedSinceRef(
   const changedFiles = await getChangedFilesSinceRef(ref, true);
   const allPackages = await getWorkspaces(opts);
 
-
-  const fileNameToPackage = (
-    fileName: string,
-  ): IWorkspace => allPackages
-    .find(pkg => fileName.startsWith(pkg.dir + path.sep));
-  const fileExistsInPackage = (fileName: string): boolean => !!fileNameToPackage(fileName);
-
   return (
     changedFiles
       // ignore deleted files
-      .filter(fileName => fileExistsInPackage(fileName))
-      .map(fileName => fileNameToPackage(fileName))
+      .filter(fileName => fileExistsInPackage(fileName, allPackages))
+      .map(fileName => fileNameToPackage(fileName, allPackages))
       // filter, so that we have only unique packages
       .filter((pkg, idx, packages) => packages.indexOf(pkg) === idx)
   );
 
   // return changedWorkspaces;
+}
+
+export async function getChangesFromLastTagByWorkspaces(
+  opts: bolt.IFilterOpts = {},
+): Promise<IWorkspaceChange> {
+  const tags = await getTags({ isRevert: true });
+  const tag = await pLocate(tags, async (t: string): Promise<boolean> => {
+    const result = await isRefInHistory(t);
+    return result;
+  }, { preserveOrder: true });
+  const changedFiles = await getChangedFilesSinceRef(tag, true);
+  const allPackages = await getWorkspaces(opts);
+  const result = {};
+
+  allPackages.forEach((workspace: IWorkspace): void => {
+    const changes = changedFiles.filter(
+      (changeFilePath: string): boolean => changeFilePath.includes(workspace.dir),
+    );
+
+    result[workspace.dir] = changes.map((change: string): string => {
+      const parts = change.split(isWin ? '\\' : '/');
+      return parts[parts.length - 1];
+    });
+  });
+
+  return result;
 }

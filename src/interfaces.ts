@@ -3,7 +3,9 @@ import {
 } from 'bolt';
 
 
-export interface IFlags { [name: string]: any }
+export interface IFlags {
+  [name: string]: any;
+}
 
 export interface IJSONValue {
   [key: string]: IJSONValue;
@@ -21,4 +23,12 @@ export interface IWorkspacesRunOptions {
   scriptArgs?: IArgs;
   spawnOpts?: ISpawnOpts;
   filterOpts?: IFilterOpts;
+}
+
+export interface IWorkspaceChange {
+  [workspace: string]: string[];
+}
+
+export interface IWorkspaceVersion {
+  [workspace: string]: string | null;
 }

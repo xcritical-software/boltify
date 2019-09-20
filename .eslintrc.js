@@ -14,7 +14,8 @@ module.exports = {
   },
   rules: {
     ...rules,
-    'import/no-unresolved': 'off'
+    'import/no-unresolved': 'off',
+    '@typescript-eslint/no-unnecessary-condition': ['error', { ignoreRhs: true }]
   },
   plugins: ['@typescript-eslint']
 };

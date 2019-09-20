@@ -1,11 +1,19 @@
 import meow from 'meow';
-import { commandGetWorkspaces, commandRunWorkspaces } from './commands';
+import {
+  commandGetWorkspaces,
+  commandRunWorkspaces,
+  commandGetChangesFromLastTagByWorkspaces,
+  commandGetVersionsByWorkspaces,
+} from './commands';
 import * as logger from './utils/logger';
 
 
 const COMMANDS = {
   workspaces: commandGetWorkspaces,
+  ws: commandGetWorkspaces,
   run: commandRunWorkspaces,
+  changes: commandGetChangesFromLastTagByWorkspaces,
+  versions: commandGetVersionsByWorkspaces,
 };
 
 const helpMessage = `
@@ -14,6 +22,11 @@ const helpMessage = `
   commands
     run                run a command inside all workspaces
     workspaces         show projects
+    changes            show changes of files grouped by workspaces
+    versions           get new versions for release by workspaces
+      --no-git-tag-version      
+                       By default, versions will add and push tags.
+                       Pass --no-git-tag-version to disable the behavior.
   options
   --since=<branch|tag> Only include packages that have been updated since the specified ref. 
                        If no ref is passed, it defaults to the most-recent tag.
@@ -28,6 +41,14 @@ export default async function cli(
     changed: {
       type: 'string',
       alias: 'b',
+    },
+    push: {
+      type: 'boolean',
+      default: true,
+    },
+    'git-tag-version': {
+      type: 'boolean',
+      default: true,
     },
   };
   const {
