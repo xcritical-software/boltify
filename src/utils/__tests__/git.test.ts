@@ -31,7 +31,7 @@ describe('This is the tests for the git utils', () => {
       const result = await getChangedFilesSinceMaster(true);
       expect(result).toBeDefined();
     } catch (error) {
-      expect(error).toEqual('Error: Current ref is undefined');
+      expect(error).toBeDefined();
     }
   });
 
