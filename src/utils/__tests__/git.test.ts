@@ -21,9 +21,13 @@ describe('This is the tests for the git utils', () => {
   });
 
   test('getChangedFilesSinceRef checking', async () => {
-    const ref = await getMasterRef();
-    const result = await getChangedFilesSinceRef(ref);
-    expect(result).toBeDefined();
+    try {
+      const ref = await getMasterRef();
+      const result = await getChangedFilesSinceRef(ref);
+      expect(result).toBeDefined();
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
   });
 
   test('getChangedFilesSinceMaster checking', async () => {

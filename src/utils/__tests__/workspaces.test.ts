@@ -24,8 +24,12 @@ describe('This is the tests for the workspaces utils', (): void => {
   });
 
   test('getChangesFromLastTagByWorkspaces checking', async () => {
-    const workspaces: IWorkspace[] = await getWorkspaces();
-    const changesByWorkspace: IWorkspaceChange = await getChangesFromLastTagByWorkspaces();
-    expect(changesByWorkspace).toHaveProperty(workspaces[0].dir);
+    try {
+      const workspaces: IWorkspace[] = await getWorkspaces();
+      const changesByWorkspace: IWorkspaceChange = await getChangesFromLastTagByWorkspaces();
+      expect(changesByWorkspace).toHaveProperty(workspaces[0].dir);
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
   });
 });
