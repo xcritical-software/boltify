@@ -30,5 +30,5 @@ export interface IWorkspaceChange {
 }
 
 export interface IWorkspaceVersion {
-  [workspace: string]: string;
+  [workspace: string]: string | null;
 }

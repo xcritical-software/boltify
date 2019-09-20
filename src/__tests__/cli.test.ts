@@ -1,5 +1,4 @@
-
-import cli from './cli';
+import cli from '../cli';
 
 
 describe('This is the tests for the workspaces command', () => {

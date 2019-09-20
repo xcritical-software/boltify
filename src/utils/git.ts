@@ -1,7 +1,7 @@
 import execa from 'execa';
 import path from 'path';
-import regex from 'conventional-commits-parser/lib/regex.js';
-import parser from 'conventional-commits-parser/lib/parser.js';
+import regex from 'conventional-commits-parser/lib/regex';
+import parser from 'conventional-commits-parser/lib/parser';
 import analyzeCommit from '@semantic-release/commit-analyzer/lib/analyze-commit';
 
 
@@ -71,6 +71,7 @@ export async function analyzeCommitsSinceRef(ref: string, workspace: string): Pr
       'resolves',
       'resolved',
       'add',
+      'adds',
       'added',
     ],
     issuePrefixes: ['#'],
@@ -78,15 +79,17 @@ export async function analyzeCommitsSinceRef(ref: string, workspace: string): Pr
     fieldPattern: /^-(.*?)-$/,
     revertPattern: /^Revert\s"([\s\S]*)"\s*This reverts commit (\w*)\./,
     revertCorrespondence: ['header', 'hash'],
-    warn() {},
     mergePattern: null as any,
     mergeCorrespondence: null as any,
   };
 
   const releaseRules = [
-    { type: '/feat/', release: 'minor' },
+    { type: '/feat/', release: 'patch' },
     { type: '/fix/', release: 'patch' },
     { type: '/perf/', release: 'patch' },
+    { type: '/bump(patch)/', release: 'patch' },
+    { type: '/bump(minor)/', release: 'minor' },
+    { type: '/bump(major)/', release: 'major' },
   ];
 
   try {
@@ -114,12 +117,18 @@ export async function getFirstCommitByWorkspaceFolder(
 }
 
 export async function getTags({ isRevert }: { isRevert: boolean }): Promise<string[]> {
-  return (await execa('git', ['tag', (isRevert ? '--sort=-refname' : '')])).stdout
+  const execaOpts = ['tag'];
+
+  if (isRevert) {
+    execaOpts.push('--sort=-refname');
+  }
+
+  return (await execa('git', execaOpts)).stdout
     .split('\n')
     .map(tag => tag.trim());
 }
 
-export async function isRefInHistory(ref: string) {
+export async function isRefInHistory(ref: string): Promise<boolean> {
   try {
     await execa('git', ['merge-base', '--is-ancestor', ref, 'HEAD']);
     return true;

@@ -4,15 +4,12 @@ import { toSpawnOpts, toFilterOpts } from 'bolt/dist/modern/utils/options';
 import path from 'path';
 import pLocate from 'p-locate';
 import os from 'os';
-import semver from 'semver';
 
 import {
-  IWorkspace, IFlags, IWorkspacesRunOptions, IWorkspaceChange, IWorkspaceVersion,
+  IWorkspace, IFlags, IWorkspacesRunOptions, IWorkspaceChange,
 } from '../interfaces';
 import {
   getChangedFilesSinceRef,
-  analyzeCommitsSinceRef,
-  getFirstCommitByWorkspaceFolder,
   getTags,
   isRefInHistory,
 } from './git';
@@ -85,7 +82,10 @@ export async function getChangesFromLastTagByWorkspaces(
   opts: bolt.IFilterOpts = {},
 ): Promise<IWorkspaceChange> {
   const tags = await getTags({ isRevert: true });
-  const tag = await pLocate(tags, t => isRefInHistory(t), { preserveOrder: true });
+  const tag = await pLocate(tags, async (t: string): Promise<boolean> => {
+    const result = await isRefInHistory(t);
+    return result;
+  }, { preserveOrder: true });
   const changedFiles = await getChangedFilesSinceRef(tag, true);
   const allPackages = await getWorkspaces(opts);
   const result = {};
@@ -102,43 +102,4 @@ export async function getChangesFromLastTagByWorkspaces(
   });
 
   return result;
-}
-
-async function getNextVersion(
-  tags: string[],
-  workspace: IWorkspace,
-): Promise<IWorkspaceVersion> {
-  const wName = workspace.getName();
-  const folderName = workspace.dir.replace(process.cwd() + path.sep, '');
-  let ref = '';
-  let currentVersion;
-
-  if (tags.length === 0) {
-    ref = await getFirstCommitByWorkspaceFolder(folderName);
-    currentVersion = workspace.getVersion();
-  } else {
-    ref = await pLocate(tags, t => isRefInHistory(t), { preserveOrder: true });
-    currentVersion = ref.replace(`${wName}-`, '');
-  }
-
-  const releaseType = await analyzeCommitsSinceRef(ref, folderName);
-  const next = semver.inc(currentVersion, releaseType as semver.ReleaseType);
-
-  return {
-    [wName]: next,
-  };
-}
-
-export async function getNextVersionsByWorkspaces(
-  workspaces: IWorkspace[],
-): Promise<IWorkspaceVersion[]> {
-  const tags = await getTags({ isRevert: true });
-
-  const promises = workspaces.map((workspace: IWorkspace): Promise<IWorkspaceVersion> => {
-    const name = workspace.getName();
-    const workspaceTags = tags.filter((tag: string) => tag.startsWith(name));
-    return getNextVersion(workspaceTags, workspace);
-  });
-
-  return Promise.all(promises);
 }

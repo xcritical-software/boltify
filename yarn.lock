@@ -1341,7 +1341,7 @@
     lodash.unescape "4.0.1"
     semver "^6.3.0"
 
-"@xcritical/eslint-plugin-xc-front-lint@latest":
+"@xcritical/eslint-plugin-xc-front-lint@^1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@xcritical/eslint-plugin-xc-front-lint/-/eslint-plugin-xc-front-lint-1.0.1.tgz#c321ce2a0462be5ee8c1cbb2f21f63ec0351601a"
   integrity sha512-SqVW/PpJbl+c0mNgcoGF/ckt2BfKCUeKmTwntXJ+59NWAe6RFHMe64dxK/hpKM8LfhpRc1UyvZvOHBZ/FNFwrw==
@@ -1395,7 +1395,7 @@
     babel-plugin-lodash "^3.3.4"
     babel-plugin-styled-components "^1.10.0"
 
-"@xcritical/xc-front-libs-utils@latest":
+"@xcritical/xc-front-libs-utils@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@xcritical/xc-front-libs-utils/-/xc-front-libs-utils-1.0.0.tgz#0da772145429dc766abc89c470fc248bbf6ad0df"
   integrity sha512-hATxfTahYDvQvfD7yMyeV6/aUUq13ZRfIFePBxkc04m6Y8179lCrn9TbKbWW9EbYyXfhS8hwcyjV3MFFxrMkaA==
