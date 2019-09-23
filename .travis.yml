@@ -18,7 +18,7 @@ before_deploy:
   - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
 deploy:
   provider: script
-  script: "yarn deploy --minor --access public"
+  script: "yarn deploy --access public"
   skip_cleanup: true
   on:
     branch: master
