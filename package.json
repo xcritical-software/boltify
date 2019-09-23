@@ -13,7 +13,7 @@
     "compile": "gulp --cwd . compile",
     "build": "yarn clean && yarn compile",
     "build-pack": "cd .publish && yarn pack",
-    "deploy": "yarn build-pack && yarn publish .publish/*.tgz",
+    "deploy": "yarn build-pack && npm publish .publish/*.tgz",
     "check": "yarn lint && yarn test",
     "clean": "rimraf dist lib .publish",
     "re-install": "yarn clean && rd /s/q node_modules && yarn",
