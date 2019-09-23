@@ -1,6 +1,6 @@
 {
   "name": "@xcritical/boltify",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A tool for managing JavaScript projects with multiple packages based on Bolt.",
   "main": "index.js",
   "repository": "https://github.com/xcritical-software/monorepo-ci-tools.git",
@@ -12,8 +12,7 @@
     "lint:fix": "yarn lint --fix",
     "compile": "gulp --cwd . compile",
     "build": "yarn clean && yarn compile",
-    "build-pack": "cd .publish && yarn pack",
-    "deploy": "yarn build-pack && yarn publish .publish/*.tgz",
+    "deploy": "npm publish .publish  --access public",
     "check": "yarn lint && yarn test",
     "clean": "rimraf dist lib .publish",
     "re-install": "yarn clean && rd /s/q node_modules && yarn",
