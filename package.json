@@ -1,5 +1,5 @@
 {
-  "name": "@xcritical/boltify",
+  "name": "boltify",
   "version": "1.0.3",
   "description": "A tool for managing JavaScript projects with multiple packages based on Bolt.",
   "main": "index.js",
