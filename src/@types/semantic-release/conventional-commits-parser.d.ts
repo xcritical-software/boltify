@@ -5,3 +5,6 @@ declare module 'conventional-commits-parser/lib/parser' {
 declare module 'conventional-commits-parser/lib/regex' {
   export default function regex(options: any): any;
 }
+declare module 'conventional-commits-filter' {
+  export default function filter(commits: any): any;
+}

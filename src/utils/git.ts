@@ -1,8 +1,5 @@
 import execa from 'execa';
 import path from 'path';
-import regex from 'conventional-commits-parser/lib/regex';
-import parser from 'conventional-commits-parser/lib/parser';
-import analyzeCommit from '@semantic-release/commit-analyzer/lib/analyze-commit';
 
 
 export async function getRef(name: string): Promise<string> {
@@ -50,60 +47,15 @@ export async function getChangedFilesSinceMaster(fullPath = false): Promise<stri
   return getChangedFilesSinceRef(ref, fullPath);
 }
 
-export async function analyzeCommitsSinceRef(ref: string, workspace: string): Promise<string> {
+export async function getCommitsSinceRef(ref: string, workspace: string): Promise<string> {
   const { stdout } = await execa('git', [
     'log',
     `${ref}..HEAD`,
-    '--stat',
-    '--name-only',
     '--format=%B%n------------------------ >8 ------------------------',
     '--',
     workspace,
   ]);
-
-  const options = {
-    headerPattern: /^(\w*)(?:\(([\w$.\-* ]*)\))?: (.*)$/,
-    headerCorrespondence: ['type', 'scope', 'subject'],
-    referenceActions: [
-      'close',
-      'closes',
-      'closed',
-      'fix',
-      'fixes',
-      'fixed',
-      'resolve',
-      'resolves',
-      'resolved',
-      'add',
-      'adds',
-      'added',
-    ],
-    issuePrefixes: ['#'],
-    noteKeywords: ['BREAKING CHANGE'],
-    fieldPattern: /^-(.*?)-$/,
-    revertPattern: /^Revert\s"([\s\S]*)"\s*This reverts commit (\w*)\./,
-    revertCorrespondence: ['header', 'hash'],
-    mergePattern: null as any,
-    mergeCorrespondence: null as any,
-  };
-
-  const releaseRules = [
-    { type: '/feat/', release: 'patch' },
-    { type: '/fix/', release: 'patch' },
-    { type: '/perf/', release: 'patch' },
-    { type: '/bump(patch)/', release: 'patch' },
-    { type: '/bump(minor)/', release: 'minor' },
-    { type: '/bump(major)/', release: 'major' },
-  ];
-
-  try {
-    const parsed = parser(stdout.trim(), options, regex(options));
-    const release = analyzeCommit(releaseRules, parsed);
-
-    return release;
-  } catch (e) {
-    return null;
-  }
+  return stdout;
 }
 
 export async function getFirstCommitByWorkspaceFolder(
