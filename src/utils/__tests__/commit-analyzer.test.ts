@@ -4,7 +4,6 @@ import {
 } from '../commit-analyzer';
 
 
-
 const commitsMinor = `fix(tests): fixup! fixup! Change error checking
 
 ------------------------ >8 ------------------------
@@ -55,26 +54,25 @@ describe('This is the tests for the commit parsing', () => {
   let spy: any = null;
 
   beforeAll(() => {
-    spy = jest.spyOn(console, 'log').mockImplementation()
+    spy = jest.spyOn(console, 'log').mockImplementation();
   });
-  
+
   afterAll(() => {
     spy.mockRestore();
   });
 
-  test('parseCommits checking', async () => {
+  test('parseCommits checking', () => {
     const result = parseCommits(commitsMinor);
     expect(result.length).toBe(6);
   });
 
-  test('analyzeCommits checking', async () => {
+  test('analyzeCommits checking', () => {
     const result = analyzeCommits(parseCommits(commitsMinor));
-    expect(result).toBe("minor");
+    expect(result).toBe('minor');
   });
 
-  test('analyzeCommits checking for majorVersion', async () => {
+  test('analyzeCommits checking for majorVersion', () => {
     const result = analyzeCommits(parseCommits(commitsMajor));
-    expect(result).toBe("major");
+    expect(result).toBe('major');
   });
-  
 });

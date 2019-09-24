@@ -50,12 +50,17 @@ const options: ICommitParsersOptions = {
 };
 
 function compareReleaseTypes(currentReleaseType: string, releaseType: string): boolean {
-  return !currentReleaseType || DEFAULT_RELEASE_RULES.indexOf(releaseType) < DEFAULT_RELEASE_RULES.indexOf(currentReleaseType);
+  return !currentReleaseType
+  || DEFAULT_RELEASE_RULES.indexOf(releaseType)
+     < DEFAULT_RELEASE_RULES.indexOf(currentReleaseType);
 }
 
 
 export function parseCommits(commitsRaw: string): any {
-  const commits = commitsRaw.trim().split('------------------------ >8 ------------------------').filter(f => f);
+  const commits = commitsRaw
+    .trim()
+    .split('------------------------ >8 ------------------------')
+    .filter(f => f);
   return filter(commits.map(commit => parser(commit, options, regex(options))));
 }
 
