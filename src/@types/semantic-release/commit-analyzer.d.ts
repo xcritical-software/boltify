@@ -1,6 +1,7 @@
 declare module '@semantic-release/commit-analyzer/lib/analyze-commit' {
   interface IAngularRule {
     type: string;
+    scope?: string;
     release: string;
   }
 
@@ -19,7 +20,17 @@ declare module '@semantic-release/commit-analyzer/lib/analyze-commit' {
     release: string;
   }
 
-  type Rule = IAngularRule | IAtomRule | IESLintRule | IExpressRule;
+  interface IRevertRule {
+    revert: boolean;
+    release: string;
+  }
+
+  interface IBreakingRule {
+    breaking: boolean;
+    release: string;
+  }
+
+  type Rule = IAngularRule | IAtomRule | IESLintRule | IExpressRule | IRevertRule | IBreakingRule;
 
   export default function analyzeCommit(releaseRules: Rule[], commit: any): string;
 }
