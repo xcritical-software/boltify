@@ -24,7 +24,6 @@ export function analyzeCommits(parsedCommits: object[]): string {
   let releaseType: string = null;
   parsedCommits.forEach((commit) => {
     const commitReleaseType = analyzeCommit(RELEASE_TYPES, commit);
-
     if (commitReleaseType) {
       console.log('The release type for the commit is %s', commitReleaseType);
     } else {

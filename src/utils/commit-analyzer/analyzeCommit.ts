@@ -16,14 +16,13 @@ export const analyzeCommit = (releaseRules: Rule[], commit: any): string => {
   releaseRules
     .filter(
       ({
-        breaking, revert, ...rule
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        breaking, revert, release, ...rule
       }: IRevertRule & IBreakingRule) => (!breaking || (commit.notes && commit.notes.length > 0)) // If the rule is not `breaking` or the commit doesn't have a breaking change note
-        && (!revert || commit.revert) // If the rule is not `revert` or the commit is not a revert
-        && isMatchWith(commit, rule,
-          (obj: any, src: any) => (
-            /^\/.*\/$/.test(src)
-            || isRegExp(src)
-              ? new RegExp(/^\/(.*)\/$/.exec(src)[1]).test(obj) : undefined)), // Otherwise match the regular rules
+            && (!revert || commit.revert) // If the rule is not `revert` or the commit is not a revert
+            && isMatchWith(commit, rule, (obj: any, src: any) => (/^\/.*\/$/.test(src) // Otherwise match the regular rules
+              || isRegExp(src)
+              ? new RegExp(/^\/(.*)\/$/.exec(src)[1]).test(obj) : undefined)),
     )
     .every((match) => {
       if (compareReleaseTypes(releaseType, match.release)) {
