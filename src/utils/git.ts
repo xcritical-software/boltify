@@ -1,5 +1,6 @@
 import execa from 'execa';
 import path from 'path';
+import { SCISSOR } from './const';
 
 
 export async function getRef(name: string): Promise<string> {
@@ -51,7 +52,7 @@ export async function getCommitsSinceRef(ref: string, workspace: string): Promis
   const { stdout } = await execa('git', [
     'log',
     `${ref}..HEAD`,
-    '--format=%B%n------------------------ >8 ------------------------',
+    `--format=%B%n${SCISSOR}`,
     '--',
     workspace,
   ]);
