@@ -32,7 +32,8 @@
     "execa": "^2.0.4",
     "meow": "^4.0.0",
     "p-locate": "^4.1.0",
-    "semver": "^6.3.0"
+    "semver": "^6.3.0",
+    "write-json-file": "^4.2.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",

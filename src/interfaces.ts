@@ -8,7 +8,7 @@ export interface IFlags {
 }
 
 export interface IJSONValue {
-  [key: string]: IJSONValue;
+  [key: string]: IJSONValue | string | any;
 }
 
 export interface IWorkspace extends IPackage {
