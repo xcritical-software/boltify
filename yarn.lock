@@ -1341,7 +1341,7 @@
     lodash.unescape "4.0.1"
     semver "^6.3.0"
 
-"@xcritical/eslint-plugin-xc-front-lint@^1.0.1":
+"@xcritical/eslint-plugin-xc-front-lint@^1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@xcritical/eslint-plugin-xc-front-lint/-/eslint-plugin-xc-front-lint-1.0.1.tgz#c321ce2a0462be5ee8c1cbb2f21f63ec0351601a"
   integrity sha512-SqVW/PpJbl+c0mNgcoGF/ckt2BfKCUeKmTwntXJ+59NWAe6RFHMe64dxK/hpKM8LfhpRc1UyvZvOHBZ/FNFwrw==
@@ -2504,7 +2504,7 @@ conventional-changelog-angular@^5.0.0:
     compare-func "^1.3.1"
     q "^1.5.1"
 
-conventional-commits-filter@^2.0.0:
+conventional-commits-filter@^2.0.0, conventional-commits-filter@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/conventional-commits-filter/-/conventional-commits-filter-2.0.1.tgz#55a135de1802f6510b6758e0a6aa9e0b28618db3"
   integrity sha512-92OU8pz/977udhBjgPEbg3sbYzIxMDFTlQT97w7KdhR9igNqdJvy8smmedAAgn4tPiqseFloKkrVfbXCVd+E7A==

@@ -6,12 +6,23 @@ import {
   IWorkspace, IWorkspaceVersion,
 } from '../interfaces';
 import {
-  analyzeCommitsSinceRef,
+  getCommitsSinceRef,
   getFirstCommitByWorkspaceFolder,
   getTags,
   isRefInHistory,
 } from './git';
 
+import {
+  analyzeCommits,
+  parseCommits,
+} from './commit-analyzer';
+
+
+async function analyzeCommitsSinceRef(ref: string, folderName: string): Promise<string> {
+  const commits = await getCommitsSinceRef(ref, folderName);
+  const parsedCommits = parseCommits(commits);
+  return analyzeCommits(parsedCommits);
+}
 
 export async function getNextVersion(
   tags: string[],

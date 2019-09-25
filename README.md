@@ -2,7 +2,7 @@
 
 > A tool for managing projects with multiple packages based on [Bolt](http://boltpkg.com/).
 
-[![Build Status](https://travis-ci.org/xcritical-software/monorepo-ci-tools.svg?branch=master)](https://travis-ci.org/xcritical-software/monorepo-ci-tools)
+[![Build Status](https://travis-ci.org/xcritical-software/boltify.svg?branch=master)](https://travis-ci.org/xcritical-software/boltify)
 
 #### What are workspaces?
 
