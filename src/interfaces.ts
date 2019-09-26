@@ -30,7 +30,8 @@ export interface IWorkspaceChange {
 }
 
 export interface IWorkspaceVersion {
-  [workspace: string]: string | null;
+  workspace: IWorkspace;
+  nextVersion: string;
 }
 
 export interface IAngularRule {

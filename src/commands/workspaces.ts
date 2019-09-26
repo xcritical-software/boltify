@@ -41,7 +41,7 @@ export async function commandGetWorkspaces(
 
     write(trimmedColumns(workspacesToPrint, ['name', 'version', 'description']));
   } catch (error) {
-    write('Error', {}, error);
+    console.error(error);
   }
 }
 
@@ -59,6 +59,6 @@ export async function commandGetChangesFromLastTagByWorkspaces(): Promise<void> 
 
     write(trimmedColumns(changesToPrint, ['workspace', 'changes']));
   } catch (error) {
-    write('Error', {}, error);
+    console.error(error);
   }
 }
