@@ -34,6 +34,10 @@ const flagOpts: any = {
     type: 'boolean',
     default: true,
   },
+  loglevel: {
+    type: 'string',
+    default: 'info',
+  },
 };
 
 const helpMessage = `
@@ -69,7 +73,7 @@ export default async function cli(
   exit = false,
 ): Promise<any> {
   log.pause();
-  log.heading = 'lerna';
+  log.heading = 'boltify';
 
   log.silly('argv', argv.join(' '));
 
@@ -85,17 +89,17 @@ export default async function cli(
     flags: flagOpts,
   });
 
-  logger.title(
-    `boltify v${pkg.version}`,
-    `(node v${process.versions.node})`,
-    { emoji: '⌚' },
-  );
 
   return new Promise((resolve, reject): any => {
     // run everything inside a Promise chain
     let chain = Promise.resolve();
 
     chain = chain.then(() => configureLogging(flags));
+    chain = chain.then(() => logger.title(
+      `v${pkg.version}`,
+      `(node v${process.versions.node})`,
+      { emoji: '⌚' },
+    ));
     chain = chain.then(() => runCommand(input, flags, showHelp));
 
     chain.then(

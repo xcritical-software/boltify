@@ -2,6 +2,7 @@
 import columnify from 'columnify';
 import chalk from 'chalk';
 import log from 'npmlog';
+import { IPackagePrint } from 'src/commands';
 
 
 interface ILoggerOpts {
@@ -30,7 +31,11 @@ function fmt(result: string, opts: ILoggerOpts = {}): string {
 
   return result;
 }
-
+export function output(...args: any[]): void {
+  log.clearProgress();
+  console.log(...args);
+  log.showProgress();
+}
 
 export function trimmedColumns(
   formattedResults: any[],
@@ -64,7 +69,7 @@ export function write(
   if (err) {
     log.error('', fmt(message, opts));
   } else {
-    log.info('', fmt(message, opts));
+    log.verbose('', fmt(message, opts));
   }
 }
 
@@ -75,10 +80,48 @@ export function title(
 ): void {
   let str = chalk.bold(_title);
   if (subtitle) str += ` ${chalk.dim(subtitle)}`;
-  write(str, opts);
+  log.info(str, opts.emoji);
 }
 
 
 export function cmd(str: string): void {
   write(chalk.bgBlack.magenta(`\`${str}\``));
+}
+
+
+function formatJSON(resultList: IPackagePrint[]): string {
+  return JSON.stringify(resultList, null, 2);
+}
+
+function formatColumns(resultList: IPackagePrint[]): string {
+  const formattedResults = resultList.map((result) => {
+    const formatted: any = {
+      name: result.name,
+    };
+
+    if (result.version) {
+      formatted.version = chalk.green(`v${result.version}`);
+    } else {
+      formatted.version = chalk.yellow('MISSING');
+    }
+
+    if (result.private) {
+      formatted.private = `(${chalk.red('PRIVATE')})`;
+    }
+
+    return formatted;
+  });
+
+  return trimmedColumns(formattedResults, ['name', 'version', 'private', 'description']);
+}
+
+export function outputFormat(pkgList: IPackagePrint[], { json }: any): void {
+  let text = '';
+  if (json) {
+    text = formatJSON(pkgList);
+  } else {
+    text = formatColumns(pkgList);
+  }
+
+  output(text);
 }
