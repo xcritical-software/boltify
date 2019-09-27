@@ -24,7 +24,7 @@ function addWorkspaceTag(enable: boolean) {
     }: IWorkspaceVersion,
   ): Promise<IWorkspaceVersion> {
     if (enable) {
-      const tag = nextVersion ? `${workspace}-v${nextVersion}` : null;
+      const tag = nextVersion ? `${workspace.getName()}-v${nextVersion}` : null;
       await addTag(tag);
     }
     return { workspace, nextVersion };

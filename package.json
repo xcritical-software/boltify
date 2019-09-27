@@ -16,13 +16,14 @@
     "check": "yarn lint && yarn test",
     "clean": "rimraf dist lib .publish",
     "re-install": "yarn clean && rd /s/q node_modules && yarn",
-    "mono-ci": "node .publish/bin.js"
+    "boltify": "node .publish/bin.js"
   },
   "bin": {
     "boltify": "./bin.js"
   },
   "private": false,
   "dependencies": {
+    "@types/npmlog": "^4.1.2",
     "bolt": "^0.23.6",
     "chalk": "^2.4.2",
     "columnify": "^1.5.4",
@@ -32,12 +33,15 @@
     "execa": "^2.0.4",
     "lodash": "^4.17.15",
     "meow": "^4.0.0",
+    "npmlog": "^4.1.2",
     "p-locate": "^4.1.0",
     "semver": "^6.3.0",
     "write-json-file": "^4.2.0"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.5",
     "@types/jest": "^24.0.18",
+    "@types/lodash": "^4.14.139",
     "@types/meow": "^4.0.0",
     "@types/node": "^12.7.3",
     "@types/semver": "^6.0.2",
@@ -47,9 +51,7 @@
     "jest": "^24.9.0",
     "jest-teamcity-reporter": "^0.9.0",
     "lint-staged": "^9.2.5",
-    "ts-jest": "^24.0.2",
-    "@types/debug": "^4.1.5",
-    "@types/lodash": "^4.14.139"
+    "ts-jest": "^24.0.2"
   },
   "lint-staged": {
     "*.{js,ts}": [

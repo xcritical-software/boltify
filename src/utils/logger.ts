@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import columnify from 'columnify';
 import chalk from 'chalk';
+import log from 'npmlog';
 
 
 interface ILoggerOpts {
@@ -61,9 +62,9 @@ export function write(
   err = false,
 ): void {
   if (err) {
-    console.error(fmt(message, opts));
+    log.error('', fmt(message, opts));
   } else {
-    console.log(fmt(message, opts));
+    log.info('', fmt(message, opts));
   }
 }
 

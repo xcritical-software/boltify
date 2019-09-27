@@ -1,4 +1,8 @@
+/* eslint-disable @typescript-eslint/promise-function-async */
 import meow from 'meow';
+import log from 'npmlog';
+
+import { configureLogging } from './configuration';
 import {
   commandGetWorkspaces,
   commandRunWorkspaces,
@@ -16,9 +20,25 @@ const COMMANDS = {
   versions: commandGetVersionsByWorkspaces,
 };
 
+const flagOpts: any = {
+  '--': true,
+  changed: {
+    type: 'string',
+    alias: 'b',
+  },
+  push: {
+    type: 'boolean',
+    default: true,
+  },
+  'git-tag-version': {
+    type: 'boolean',
+    default: true,
+  },
+};
+
 const helpMessage = `
   usage
-    $ mono-ci [command] <...args> <...opts>
+    $ boltify [command] <...args> <...opts>
   commands
     run                run a command inside all workspaces
     workspaces         show projects
@@ -32,25 +52,27 @@ const helpMessage = `
                        If no ref is passed, it defaults to the most-recent tag.
 `;
 
+function runCommand(
+  input: string[],
+  flags: { [key: string]: object },
+  showHelp: any,
+): Promise<void> | void {
+  const [command, ...commandArgs] = input;
+  if (COMMANDS[command]) {
+    return COMMANDS[command](commandArgs, flags);
+  }
+  return showHelp(0);
+}
+
 export default async function cli(
   argv: string[] = [],
   exit = false,
-): Promise<void> {
-  const flagOpts: any = {
-    '--': true,
-    changed: {
-      type: 'string',
-      alias: 'b',
-    },
-    push: {
-      type: 'boolean',
-      default: true,
-    },
-    'git-tag-version': {
-      type: 'boolean',
-      default: true,
-    },
-  };
+): Promise<any> {
+  log.pause();
+  log.heading = 'lerna';
+
+  log.silly('argv', argv.join(' '));
+
   const {
     pkg,
     input,
@@ -64,25 +86,30 @@ export default async function cli(
   });
 
   logger.title(
-    `mono-ci v${pkg.version}`,
+    `boltify v${pkg.version}`,
     `(node v${process.versions.node})`,
     { emoji: '⌚' },
   );
-  const [command, ...commandArgs] = input;
 
-  try {
-    if (COMMANDS[command]) {
-      await COMMANDS[command](commandArgs, flags);
-    } else {
-      showHelp(0);
-    }
-  } catch (err) {
-    logger.write(err.message, null, true);
+  return new Promise((resolve, reject): any => {
+    // run everything inside a Promise chain
+    let chain = Promise.resolve();
+
+    chain = chain.then(() => configureLogging(flags));
+    chain = chain.then(() => runCommand(input, flags, showHelp));
+
+    chain.then(
+      (result) => {
+        resolve(result);
+      },
+      (err) => {
+        logger.write(err.message, null, true);
+        reject(err);
+      },
+    );
+  }).catch(() => {
     if (exit) {
       process.exit(1);
-    } else {
-      throw err;
     }
-  }
-  return null;
+  });
 }

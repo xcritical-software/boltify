@@ -1,14 +1,12 @@
 // Parts of this source are modified from @semantic-release/commit-analyzer:
 // semantic-release/commit-analyzer: https://github.com/semantic-release/commit-analyzer/blob/master/LICENSE
-import debug from 'debug';
+import log from 'npmlog';
 import { isMatchWith, isRegExp } from 'lodash';
 import { Rule, IRevertRule, IBreakingRule } from '../../interfaces';
 
 import { compareReleaseTypes } from './compareReleaseTypes';
 import { DEFAULT_RELEASE_RULES } from './const';
 
-
-const $debug = debug('boltify:commit-analyzer');
 
 export const analyzeCommit = (releaseRules: Rule[], commit: any): string => {
   let releaseType: string;
@@ -27,18 +25,17 @@ export const analyzeCommit = (releaseRules: Rule[], commit: any): string => {
     .every((match) => {
       if (compareReleaseTypes(releaseType, match.release)) {
         releaseType = match.release;
-        $debug('The rule %o match commit with release type %o', match, releaseType);
+        log.verbose('boltify:commit-analyzer', 'The rule %o match commit with release type %o', match, releaseType);
         if (releaseType === DEFAULT_RELEASE_RULES[0]) {
-          $debug('Release type %o is the highest possible. Stop analysis.', releaseType);
+          log.verbose('boltify:commit-analyzer', 'Release type %o is the highest possible. Stop analysis.', releaseType);
           return false;
         }
       } else {
-        $debug(
+        log.verbose('boltify:commit-analyzer',
           'The rule %o match commit with release type %o but the higher release type %o has already been found for this commit',
           match,
           match.release,
-          releaseType,
-        );
+          releaseType);
       }
 
       return true;
