@@ -107,7 +107,7 @@ export default async function cli(
         resolve(result);
       },
       (err) => {
-        log.error(null, null, err)
+        log.error(null, null, err);
         reject(err);
       },
     );

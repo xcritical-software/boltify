@@ -30,9 +30,11 @@ function updateWorkspaceVersion(
 
   if (updatePackage) {
     const promises = workspaces.map(({ workspace, nextVersion }) => {
+      let updateFile = Promise.resolve();
       const { config: { filePath } } = workspace;
-      chain = chain.then(() => updateWorkspaceConfig(workspace, { version: nextVersion }));
-      return chain.then(() => filePath);
+      updateFile = updateFile
+        .then(() => updateWorkspaceConfig(workspace, { version: nextVersion }));
+      return updateFile.then(() => filePath);
     });
     chain = chain.then(() => Promise.all(promises)).then(filePaths => gitAdd(filePaths));
   }
