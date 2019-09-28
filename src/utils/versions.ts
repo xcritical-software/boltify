@@ -48,7 +48,8 @@ export async function getNextVersion(
   const next = semver.inc(currentVersion, releaseType as semver.ReleaseType);
 
   return {
-    [wName]: next,
+    workspace,
+    nextVersion: next,
   };
 }
 

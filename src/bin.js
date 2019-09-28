@@ -9,7 +9,7 @@ if (majorVer < 8) {
   throw new Error(
     'Node version ' +
       ver +
-      ' is not supported in mono-ci, please use Node.js 8.0 or higher.'
+      ' is not supported in boltify, please use Node.js 8.0 or higher.'
   );
 } else {
   cli = require('./cli').default;

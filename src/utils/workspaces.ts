@@ -4,10 +4,13 @@ import { toSpawnOpts, toFilterOpts } from 'bolt/dist/modern/utils/options';
 import path from 'path';
 import pLocate from 'p-locate';
 import os from 'os';
+import writeJsonFile from 'write-json-file';
 
 import {
   IWorkspace, IFlags, IWorkspacesRunOptions, IWorkspaceChange,
 } from '../interfaces';
+
+
 import {
   getChangedFilesSinceRef,
   getTags,
@@ -102,4 +105,14 @@ export async function getChangesFromLastTagByWorkspaces(
   });
 
   return result;
+}
+
+// eslint-disable-next-line @typescript-eslint/promise-function-async
+export function updateWorkspaceConfig(
+  workspace: IWorkspace,
+  obj: object,
+): Promise<void> {
+  const { config: { filePath, json } } = workspace;
+  const newConfig = { ...json, ...obj };
+  return writeJsonFile(filePath, newConfig);
 }

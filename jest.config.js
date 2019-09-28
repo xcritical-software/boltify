@@ -19,7 +19,7 @@ module.exports = {
   testResultsProcessor: "jest-teamcity-reporter",
   verbose: true,
   displayName: {
-    name: '@xcritical/mono-ci',
+    name: '@xcritical/boltify',
     color: 'blue',
   },
   errorOnDeprecated: true,

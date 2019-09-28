@@ -8,7 +8,7 @@ export interface IFlags {
 }
 
 export interface IJSONValue {
-  [key: string]: IJSONValue;
+  [key: string]: IJSONValue | string | any;
 }
 
 export interface IWorkspace extends IPackage {
@@ -30,5 +30,40 @@ export interface IWorkspaceChange {
 }
 
 export interface IWorkspaceVersion {
-  [workspace: string]: string | null;
+  workspace: IWorkspace;
+  nextVersion: string;
 }
+
+export interface IAngularRule {
+  type: string;
+  scope?: string;
+  release: string;
+}
+
+export interface IAtomRule {
+  emoji: string;
+  release: string;
+}
+
+export interface IESLintRule {
+  tag: string;
+  release: string;
+}
+
+export interface IExpressRule {
+  component: string;
+  release: string;
+}
+
+export interface IRevertRule {
+  revert: boolean;
+  release: string;
+}
+
+export interface IBreakingRule {
+  breaking: boolean;
+  release: string;
+}
+
+// eslint-disable-next-line max-len
+export type Rule = IAngularRule | IAtomRule | IESLintRule | IExpressRule | IRevertRule | IBreakingRule;

@@ -1,6 +1,6 @@
 {
   "name": "boltify",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "A tool for managing JavaScript projects with multiple packages based on Bolt.",
   "main": "index.js",
   "repository": "https://github.com/xcritical-software/monorepo-ci-tools.git",
@@ -16,30 +16,34 @@
     "check": "yarn lint && yarn test",
     "clean": "rimraf dist lib .publish",
     "re-install": "yarn clean && rd /s/q node_modules && yarn",
-    "mono-ci": "node .publish/bin.js"
+    "boltify": "node .publish/bin.js"
   },
   "bin": {
     "boltify": "./bin.js"
   },
   "private": false,
   "dependencies": {
-    "@semantic-release/commit-analyzer": "^6.3.0",
     "bolt": "^0.23.6",
     "chalk": "^2.4.2",
     "columnify": "^1.5.4",
     "conventional-commits-filter": "^2.0.1",
     "conventional-commits-parser": "^3.0.1",
     "execa": "^2.0.4",
+    "lodash": "^4.17.15",
     "meow": "^4.0.0",
+    "npmlog": "^4.1.2",
     "p-locate": "^4.1.0",
-    "semver": "^6.3.0"
+    "semver": "^6.3.0",
+    "temp-write": "^4.0.0",
+    "write-json-file": "^4.2.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
+    "@types/lodash": "^4.14.139",
     "@types/meow": "^4.0.0",
     "@types/node": "^12.7.3",
+    "@types/npmlog": "^4.1.2",
     "@types/semver": "^6.0.2",
-    "@types/through2": "^2.0.34",
     "@xcritical/eslint-plugin-xc-front-lint": "^1.0.0",
     "@xcritical/xc-front-libs-utils": "^1.0.0",
     "jest": "^24.9.0",
