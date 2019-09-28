@@ -1,10 +1,10 @@
-import { getWorkspaces, getWorkspacesChangedSinceRef } from '../utils/workspaces';
+import { getWorkspaces, getWorkspacesChangedSinceRef } from '../../utils/workspaces';
 import {
   getRef,
   runWorkspaceTasks,
   toWorkspacesRunOptions,
-} from '../utils';
-import { IWorkspace, IFlags } from '../interfaces';
+} from '../../utils';
+import { IWorkspace, IFlags } from '../../interfaces';
 
 
 export async function commandRunWorkspaces(

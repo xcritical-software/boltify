@@ -1,5 +1,13 @@
+/* eslint-disable @typescript-eslint/promise-function-async */
+
 import execa from 'execa';
 import path from 'path';
+import { EOL } from 'os';
+import log from 'npmlog';
+import tempWrite from 'temp-write';
+
+import { IFlags } from 'src/interfaces';
+import { SCISSOR } from './const';
 
 
 export async function getRef(name: string): Promise<string> {
@@ -51,7 +59,7 @@ export async function getCommitsSinceRef(ref: string, workspace: string): Promis
   const { stdout } = await execa('git', [
     'log',
     `${ref}..HEAD`,
-    '--format=%B%n------------------------ >8 ------------------------',
+    `--format=%B%n${SCISSOR}`,
     '--',
     workspace,
   ]);
@@ -97,10 +105,55 @@ export async function isRefInHistory(ref: string): Promise<boolean> {
   }
 }
 
-export async function addTag(tag: string, message?: string, ref = 'HEAD'): Promise<void> {
-  await execa('git', ['tag', '-a', tag, '-m', (message || tag), ref]);
+export function addTag(tag: string, message?: string, ref = 'HEAD'): Promise<any> {
+  return execa('git', ['tag', '-a', tag, '-m', (message || tag), ref]);
 }
 
-export async function pushTag(): Promise<void> {
-  await execa('git', ['push', 'origin', '--tags']);
+export function gitAdd(files: string[]): Promise<any> {
+  log.silly('gitAdd', files.join(','));
+
+  return execa('git', ['add', '--', ...files]);
+}
+
+export function pushTag(): Promise<any> {
+  return execa('git', ['push', 'origin', '--tags']);
+}
+
+
+export function gitPush(remote: string, branch: string): Promise<any> {
+  log.silly('gitPush', remote, branch);
+
+  return execa('git', ['push', '--follow-tags', '--no-verify', remote, branch]);
+}
+
+export function gitCommit(
+  message: string,
+  {
+    amend,
+    commitHooks,
+    signGitCommit,
+  }: IFlags,
+): Promise<any> {
+  log.silly('gitCommit', message);
+  const args = ['commit'];
+
+  if (commitHooks === false) {
+    args.push('--no-verify');
+  }
+
+  if (signGitCommit) {
+    args.push('--gpg-sign');
+  }
+
+  if (amend) {
+    args.push('--amend', '--no-edit');
+  } else if (message.includes(EOL)) {
+    // Use tempfile to allow multi\nline strings.
+    args.push('-F', tempWrite.sync(message, 'boltify-commit.txt'));
+  } else {
+    args.push('-m', message);
+  }
+
+  log.verbose('git', args.join(','));
+  return execa('git', args);
 }

@@ -40,20 +40,20 @@ sub-directories for further organization.
 
 | Command                                 | Description                                                               | Status |
 | --------------------------------------- | ------------------------------------------------------------------------- |--------|
-| `boltify version`                          | **Updates the version of your package(s)**                                    |✅|
+| [`boltify version`](./src/commands/version#readme) | **Updates the version of your package(s)**                                    |✅|
 | └ `boltify version --only [name glob]`      | Filter package(s) by name                                                 |✅|
 | └ `boltify version --ignore [name glob]`    | Filter out package(s) by name                                             |✅|
 | └ `boltify version --only-fs [file glob]`   | Filter package(s) by file path                                            |✅|
 | └ `boltify version --ignore-fs [file glob]` | Filter out package(s) by file path                                        |✅|
 | └ `boltify version --no-git-tag-version` | New tag(s) will not be added and pushed                                       |✅|
 | └ `boltify version --no-push` | New tag(s) will not be pushed                                        |✅|
-| `boltify run [script]`                     | **Run a script in a package**                                                 |✅|
+| [`boltify run [script]`](./src/commands/run#readme)      | **Run a script in a package**                                                 |✅|
 | └ `boltify run --only [name glob]`      | Filter package(s) by name                                                 |✅|
 | └ `boltify run --ignore [name glob]`    | Filter out package(s) by name                                             |✅|
 | └ `boltify run --only-fs [file glob]`   | Filter package(s) by file path                                            |✅|
 | └ `boltify run --ignore-fs [file glob]` | Filter out package(s) by file path                                        |✅|
 | └ `boltify run --since ref` | Filter package(s) that have been updated since the specified `ref`                                        |✅|
-| `boltify workspaces/ws`                    | **Show package(s):**                     ||
+| [`boltify workspaces/ws`](./src/commands/workspaces#readme)                    | **Show package(s):**                     ||
 | └ `boltify ws --only [name glob]`      | Filter package(s) by name                                                 |✅|
 | └ `boltify ws --ignore [name glob]`    | Filter out package(s) by name                                             |✅|
 | └ `boltify ws --only-fs [file glob]`   | Filter package(s) by file path                                            |✅|
