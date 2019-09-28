@@ -2,14 +2,14 @@ import {
   getWorkspaces,
   getWorkspacesChangedSinceRef,
   toWorkspacesRunOptions,
-} from '../utils/workspaces';
+} from '../../utils/workspaces';
 import {
   getRef,
   outputFormat,
-} from '../utils';
+} from '../../utils';
 import {
   IWorkspace, IFlags,
-} from '../interfaces';
+} from '../../interfaces';
 
 
 export interface IPackagePrint {

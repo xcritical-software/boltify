@@ -17,7 +17,7 @@ const COMMANDS = {
   ws: commandGetWorkspaces,
   run: commandRunWorkspaces,
   changes: commandGetChangesFromLastTagByWorkspaces,
-  versions: commandGetVersionsByWorkspaces,
+  version: commandGetVersionsByWorkspaces,
 };
 
 const flagOpts: any = {
@@ -47,7 +47,7 @@ const helpMessage = `
     run                run a command inside all workspaces
     workspaces         show projects
     changes            show changes of files grouped by workspaces
-    versions           get new versions for release by workspaces
+    version           get new versions for release by workspaces
       --no-git-tag-version      
                        By default, versions will add and push tags.
                        Pass --no-git-tag-version to disable the behavior.

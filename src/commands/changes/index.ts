@@ -1,13 +1,13 @@
 import {
   getChangesFromLastTagByWorkspaces,
-} from '../utils/workspaces';
+} from '../../utils/workspaces';
 import {
   trimmedColumns,
   write,
-} from '../utils';
+} from '../../utils';
 import {
   IWorkspaceChange,
-} from '../interfaces';
+} from '../../interfaces';
 
 
 export async function commandGetChangesFromLastTagByWorkspaces(): Promise<void> {

@@ -1,4 +1,4 @@
 export * from './workspaces';
 export * from './run';
-export * from './versions';
+export * from './version';
 export * from './changes';

@@ -7,19 +7,19 @@ import {
   getWorkspaces,
   toWorkspacesRunOptions,
   updateWorkspaceConfig,
-} from '../utils/workspaces';
-import { getNextVersionsByWorkspaces } from '../utils/versions';
+} from '../../utils/workspaces';
+import { getNextVersionsByWorkspaces } from '../../utils/versions';
 import {
   outputFormat,
   gitCommit,
   gitAdd,
   addTag,
   gitPush,
-} from '../utils';
+} from '../../utils';
 import {
   IFlags, IWorkspaceVersion,
-} from '../interfaces';
-import { IPackagePrint } from './workspaces';
+} from '../../interfaces';
+import { IPackagePrint } from '../workspaces';
 
 
 function updateWorkspaceVersion(
