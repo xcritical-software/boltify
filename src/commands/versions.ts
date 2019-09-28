@@ -22,22 +22,22 @@ import {
 import { IPackagePrint } from './workspaces';
 
 
-function updateWorkspaceVersion(enable: boolean) {
-  return function func(
-    {
-      workspace,
-      nextVersion,
-    }: IWorkspaceVersion,
-  ): Promise<IWorkspaceVersion> {
-    let chain = Promise.resolve();
-    if (enable) {
+function updateWorkspaceVersion(
+  workspaces: IWorkspaceVersion[],
+  { updatePackage = true }: IFlags,
+): Promise<IWorkspaceVersion[]> {
+  let chain = Promise.resolve();
+
+  if (updatePackage) {
+    const promises = workspaces.map(({ workspace, nextVersion }) => {
       const { config: { filePath } } = workspace;
       chain = chain.then(() => updateWorkspaceConfig(workspace, { version: nextVersion }));
-      chain = chain.then(() => gitAdd([filePath]));
-    }
+      return chain.then(() => filePath);
+    });
+    chain = chain.then(() => Promise.all(promises)).then(filePaths => gitAdd(filePaths));
+  }
 
-    return chain.then(() => ({ workspace, nextVersion }));
-  };
+  return chain.then(() => workspaces);
 }
 
 function gitCommitAndTagVersion(
@@ -104,9 +104,7 @@ export async function commandGetVersionsByWorkspaces(
   return getWorkspaces(opts.filterOpts)
     .then(getNextVersionsByWorkspaces)
     .then(workspaces => workspaces.filter(({ nextVersion }) => nextVersion !== null))
-    .then(workspaces => workspaces.map(workspace => Promise.resolve(workspace)
-      .then(updateWorkspaceVersion(true))))
-    .then(Promise.all)
+    .then(workspaces => updateWorkspaceVersion(workspaces, flags))
     .then((workspaces: IWorkspaceVersion[]) => gitCommitAndTagVersion(workspaces, flags))
     .then(workspaces => outputCommand(workspaces, flags))
     .then(() => gitPushToRemote(flags));
