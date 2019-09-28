@@ -149,7 +149,7 @@ export function gitCommit(
     args.push('--amend', '--no-edit');
   } else if (message.includes(EOL)) {
     // Use tempfile to allow multi\nline strings.
-    args.push('-F', tempWrite.sync(message, 'lerna-commit.txt'));
+    args.push('-F', tempWrite.sync(message, 'boltify-commit.txt'));
   } else {
     args.push('-m', message);
   }
