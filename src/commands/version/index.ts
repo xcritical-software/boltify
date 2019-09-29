@@ -3,6 +3,7 @@
 import chalk from 'chalk';
 import log from 'npmlog';
 import os from 'os';
+import { ExecaChildProcess, ExecaReturnValue } from 'execa';
 import {
   getWorkspaces,
   toWorkspacesRunOptions,
@@ -30,13 +31,15 @@ function updateWorkspaceVersion(
 
   if (updatePackage) {
     const promises = workspaces.map(({ workspace, nextVersion }) => {
-      let updateFile = Promise.resolve();
       const { config: { filePath } } = workspace;
-      updateFile = updateFile
-        .then(() => updateWorkspaceConfig(workspace, { version: nextVersion }));
-      return updateFile.then(() => filePath);
+      return Promise.resolve()
+        .then(() => updateWorkspaceConfig(workspace, { version: nextVersion }))
+        .then(() => filePath);
     });
-    chain = chain.then(() => Promise.all(promises)).then(filePaths => gitAdd(filePaths));
+
+    chain = chain
+      .then(() => Promise.all(promises))
+      .then(filePaths => gitAdd(filePaths));
   }
 
   return chain.then(() => workspaces);
@@ -90,7 +93,7 @@ function gitPushToRemote({
   gitRemote = 'origin',
   branch = 'master',
   push,
-}: IFlags): Promise<any> {
+}: IFlags): ExecaChildProcess | null {
   log.info('git', 'Pushing tags...');
 
   return push && gitPush(gitRemote, branch);
@@ -100,14 +103,14 @@ function gitPushToRemote({
 export async function commandGetVersionsByWorkspaces(
   _args: string[],
   flags: IFlags,
-): Promise<any> {
+): Promise<ExecaReturnValue> {
   const opts = toWorkspacesRunOptions(_args, flags);
 
   return getWorkspaces(opts.filterOpts)
     .then(getNextVersionsByWorkspaces)
     .then(workspaces => workspaces.filter(({ nextVersion }) => nextVersion !== null))
     .then(workspaces => updateWorkspaceVersion(workspaces, flags))
-    .then((workspaces: IWorkspaceVersion[]) => gitCommitAndTagVersion(workspaces, flags))
+    .then(workspaces => gitCommitAndTagVersion(workspaces, flags))
     .then(workspaces => outputCommand(workspaces, flags))
     .then(() => gitPushToRemote(flags));
 }
