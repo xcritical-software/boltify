@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
 
-import execa from 'execa';
+import execa, { ExecaChildProcess } from 'execa';
 import path from 'path';
 import { EOL } from 'os';
 import log from 'npmlog';
@@ -120,7 +120,7 @@ export function pushTag(): Promise<any> {
 }
 
 
-export function gitPush(remote: string, branch: string): Promise<any> {
+export function gitPush(remote: string, branch: string): ExecaChildProcess {
   log.silly('gitPush', remote, branch);
 
   return execa('git', ['push', '--follow-tags', '--no-verify', remote, branch]);
