@@ -3,7 +3,6 @@
 import chalk from 'chalk';
 import log from 'npmlog';
 import os from 'os';
-import { ExecaChildProcess, ExecaReturnValue } from 'execa';
 import {
   getWorkspaces,
   toWorkspacesRunOptions,
