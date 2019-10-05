@@ -23,28 +23,6 @@ import {
 import { IPackagePrint } from '../workspaces';
 
 
-function updateWorkspaceVersion(
-  workspaces: IWorkspaceVersion[],
-  { updatePackage = true }: IFlags,
-): Promise<IWorkspaceVersion[]> {
-  let chain = Promise.resolve();
-
-  if (updatePackage) {
-    const promises = workspaces.map(({ workspace, nextVersion }) => {
-      const { config: { filePath } } = workspace;
-      return Promise.resolve()
-        .then(() => updateWorkspaceConfig(workspace, { version: nextVersion }))
-        .then(() => filePath);
-    });
-
-    chain = chain
-      .then(() => Promise.all(promises))
-      .then(filePaths => gitAdd(filePaths));
-  }
-
-  return chain.then(() => workspaces);
-}
-
 function gitCommitAndTagVersion(
   workspaces: IWorkspaceVersion[],
   { message: subject = 'Publish', gitTagVersion, ...flags }: IFlags,
@@ -63,6 +41,33 @@ function gitCommitAndTagVersion(
     .then(() => gitTagVersion && Promise.all(tags.map(tag => addTag(tag))))
     .then(() => workspaces);
 }
+
+
+function updateWorkspaceVersion(
+  workspaces: IWorkspaceVersion[],
+  {
+    updatePackage = true,
+    ...flags
+  }: IFlags,
+): Promise<IWorkspaceVersion[]> {
+  let chain: Promise<any> = Promise.resolve();
+
+  if (updatePackage && workspaces.length > 0) {
+    const promises = workspaces.map(({ workspace, nextVersion }) => {
+      const { config: { filePath } } = workspace;
+      return Promise.resolve()
+        .then(() => updateWorkspaceConfig(workspace, { version: nextVersion }))
+        .then(() => filePath);
+    });
+
+    chain = chain
+      .then(() => Promise.all(promises))
+      .then(filePaths => gitAdd(filePaths).then(() => gitCommitAndTagVersion(workspaces, flags)));
+  }
+
+  return chain.then(() => workspaces);
+}
+
 
 function outputCommand(
   workspaces: IWorkspaceVersion[],
@@ -89,28 +94,32 @@ function outputCommand(
   return workspaces;
 }
 
-function gitPushToRemote({
-  gitRemote = 'origin',
-  branch = 'master',
-  push,
-}: IFlags): ExecaChildProcess | null {
+function gitPushToRemote(
+  workspaces: IWorkspaceVersion[],
+  {
+    gitRemote = 'origin',
+    branch = 'master',
+    push,
+  }: IFlags,
+): Promise<IWorkspaceVersion[]> {
   log.info('git', 'Pushing tags...');
 
-  return push && gitPush(gitRemote, branch);
+  return push && workspaces.length
+   && gitPush(gitRemote, branch).then(() => workspaces);
 }
 
 
 export async function commandGetVersionsByWorkspaces(
   _args: string[],
   flags: IFlags,
-): Promise<ExecaReturnValue> {
+): Promise<IWorkspaceVersion[]> {
   const opts = toWorkspacesRunOptions(_args, flags);
 
   return getWorkspaces(opts.filterOpts)
     .then(getNextVersionsByWorkspaces)
+    .then(workspaces => outputCommand(workspaces, flags))
     .then(workspaces => workspaces.filter(({ nextVersion }) => nextVersion !== null))
     .then(workspaces => updateWorkspaceVersion(workspaces, flags))
-    .then(workspaces => gitCommitAndTagVersion(workspaces, flags))
     .then(workspaces => outputCommand(workspaces, flags))
-    .then(() => gitPushToRemote(flags));
+    .then(workspaces => gitPushToRemote(workspaces, flags));
 }
