@@ -1,6 +1,7 @@
 import * as bolt from 'bolt';
 import Project from 'bolt/dist/modern/Project';
 import { toSpawnOpts, toFilterOpts } from 'bolt/dist/modern/utils/options';
+import $updatePackageVersions from 'bolt/dist/modern/functions/updatePackageVersions';
 import path from 'path';
 import pLocate from 'p-locate';
 import os from 'os';
@@ -108,11 +109,22 @@ export async function getChangesFromLastTagByWorkspaces(
 }
 
 // eslint-disable-next-line @typescript-eslint/promise-function-async
-export function updateWorkspaceConfig(
+export function setWorkspaceVersion(
   workspace: IWorkspace,
-  obj: object,
+  version: string,
 ): Promise<void> {
-  const { config: { filePath, json } } = workspace;
-  const newConfig = { ...json, ...obj };
-  return writeJsonFile(filePath, newConfig);
+  if (version) {
+    const { config: { filePath, json } } = workspace;
+    const newConfig = { ...json, ...{ version } };
+    return writeJsonFile(filePath, newConfig);
+  }
+
+  return null;
+}
+
+// eslint-disable-next-line @typescript-eslint/promise-function-async
+export function updatePackageVersions(
+  versionMap: { [key: string]: string },
+): Promise<string[]> {
+  return $updatePackageVersions(versionMap);
 }

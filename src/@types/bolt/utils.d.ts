@@ -19,6 +19,14 @@ declare module 'bolt/dist/modern/utils/options' {
   function toFilterOpts(flags: IFlags): IFilterOpts;
 }
 
+declare module 'bolt/dist/modern/functions/updatePackageVersions' {
+  interface IVersionMap {
+    [name: string]: string;
+  }
+
+  export default async function updatePackageVersions(updatedPackages: IVersionMap);
+}
+
 declare module 'bolt/dist/modern/Project' {
 
   export interface IProject {

@@ -6,7 +6,8 @@ import os from 'os';
 import {
   getWorkspaces,
   toWorkspacesRunOptions,
-  updateWorkspaceConfig,
+  setWorkspaceVersion,
+  updatePackageVersions,
 } from '../../utils/workspaces';
 import { getNextVersionsByWorkspaces } from '../../utils/versions';
 import {
@@ -24,7 +25,12 @@ import { IPackagePrint } from '../workspaces';
 
 function gitCommitAndTagVersion(
   workspaces: IWorkspaceVersion[],
-  { message: subject = 'Publish', gitTagVersion, ...flags }: IFlags,
+  {
+    message: subject = 'Publish',
+    gitTagVersion = true,
+    commit = true,
+    ...flags
+  }: IFlags,
 ): Promise<IWorkspaceVersion[]> {
   const tags = workspaces.map((
     {
@@ -36,7 +42,7 @@ function gitCommitAndTagVersion(
   const message = tags.reduce((msg, tag) => `${msg}${os.EOL} - ${tag}`, `${subject}${os.EOL}`);
 
   return Promise.resolve()
-    .then(() => gitCommit(message, flags))
+    .then(() => commit && gitCommit(message, flags))
     .then(() => gitTagVersion && Promise.all(tags.map(tag => addTag(tag))))
     .then(() => workspaces);
 }
@@ -55,13 +61,21 @@ function updateWorkspaceVersion(
     const promises = workspaces.map(({ workspace, nextVersion }) => {
       const { config: { filePath } } = workspace;
       return Promise.resolve()
-        .then(() => updateWorkspaceConfig(workspace, { version: nextVersion }))
+        .then(() => setWorkspaceVersion(workspace, nextVersion))
         .then(() => filePath);
     });
 
+    const versions = workspaces.reduce((acc, { workspace, nextVersion }) => ({
+      ...acc,
+      [workspace.getName()]: nextVersion,
+    }), {});
+
     chain = chain
       .then(() => Promise.all(promises))
-      .then(filePaths => gitAdd(filePaths).then(() => gitCommitAndTagVersion(workspaces, flags)));
+      .then(filePaths => gitAdd(filePaths))
+      .then(() => updatePackageVersions(versions))
+      .then(filePaths => gitAdd(filePaths))
+      .then(() => gitCommitAndTagVersion(workspaces, flags));
   }
 
   return chain.then(() => workspaces);
