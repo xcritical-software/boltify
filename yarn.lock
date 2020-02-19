@@ -1333,9 +1333,9 @@
     semver "^6.3.0"
 
 "@xcritical/eslint-plugin-xc-front-lint@^1.0.0":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@xcritical/eslint-plugin-xc-front-lint/-/eslint-plugin-xc-front-lint-1.0.1.tgz#c321ce2a0462be5ee8c1cbb2f21f63ec0351601a"
-  integrity sha512-SqVW/PpJbl+c0mNgcoGF/ckt2BfKCUeKmTwntXJ+59NWAe6RFHMe64dxK/hpKM8LfhpRc1UyvZvOHBZ/FNFwrw==
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@xcritical/eslint-plugin-xc-front-lint/-/eslint-plugin-xc-front-lint-1.0.3.tgz#671902dadf1042296cc8d1b3560ffa1ec20c3212"
+  integrity sha512-xWzFC+30eTahnjsuxZk/G9Q4GM8+1Fq9NzpGjehCPsn4dJyzXpHRb+IraD/9H+BWKUeodhs3veFDl6GUyhXsGw==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^2.0.0"
     "@typescript-eslint/parser" "^2.0.0"
@@ -1350,7 +1350,7 @@
     eslint-plugin-jsdoc "^3.14.1"
     eslint-plugin-jsx-a11y "^6.1.2"
     eslint-plugin-prettier "^3.0.1"
-    eslint-plugin-react "^7.12.0"
+    eslint-plugin-react "7.14.3"
     eslint-plugin-react-hooks "^1.0.2"
     eslint-teamcity "^2.1.0"
     prettier "^1.16.4"
@@ -3073,7 +3073,7 @@ eslint-plugin-react-hooks@^1.0.2:
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-1.7.0.tgz#6210b6d5a37205f0b92858f895a4e827020a7d04"
   integrity sha512-iXTCFcOmlWvw4+TOE8CLWj6yX1GwzT0Y6cUfHHZqWnSk144VmVIRcVGtUAzrLES7C798lmvnt02C7rxaOX1HNA==
 
-eslint-plugin-react@^7.12.0:
+eslint-plugin-react@7.14.3:
   version "7.14.3"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.14.3.tgz#911030dd7e98ba49e1b2208599571846a66bdf13"
   integrity sha512-EzdyyBWC4Uz2hPYBiEJrKCUi2Fn+BJ9B/pJQcjw5X+x/H2Nm59S4MJIvL4O5NEE0+WbnQwEBxWY03oUk+Bc3FA==
