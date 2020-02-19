@@ -7088,10 +7088,10 @@ sort-desc@^0.2.0:
   resolved "https://registry.yarnpkg.com/sort-desc/-/sort-desc-0.2.0.tgz#280c1bdafc6577887cedbad1ed2e41c037976646"
   integrity sha1-KAwb2vxld4h87brR7S5BwDeXZkY=
 
-sort-keys@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/sort-keys/-/sort-keys-3.0.0.tgz#fa751737e3da363ef80632d4fd78e324d661fe9a"
-  integrity sha512-77XUKMiZN5LvQXZ9sgWfJza19AvYIDwaDGwGiULM+B5XYru8Z90Oh06JvqDlJczvjjYvssrV0aK1GI6+YXvn5A==
+sort-keys@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/sort-keys/-/sort-keys-4.0.0.tgz#56dc5e256637bfe3fec8db0dc57c08b1a2be22d6"
+  integrity sha512-hlJLzrn/VN49uyNkZ8+9b+0q9DjmmYcYOnbMQtpkLrYpPwRApDPZfmqbUfJnAA3sb/nRib+nDot7Zi/1ER1fuA==
   dependencies:
     is-plain-obj "^2.0.0"
 
@@ -8094,15 +8094,15 @@ write-file-atomic@^3.0.0:
     typedarray-to-buffer "^3.1.5"
 
 write-json-file@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/write-json-file/-/write-json-file-4.2.0.tgz#85a853ef1c28feb206bd56c2903fe19a6803c7ac"
-  integrity sha512-PUmPZDcQZRO+w69pGGepxt5r8USK3KTDy5758dOAEzDaL5a6gbe5EPkyOfo28DRT/cruPRiMaAy9XZnDHHoBjQ==
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/write-json-file/-/write-json-file-4.3.0.tgz#908493d6fd23225344af324016e4ca8f702dd12d"
+  integrity sha512-PxiShnxf0IlnQuMYOPPhPkhExoCQuTUNPOa/2JWCYTmBquU9njyyDuwRKN26IZBlp4yn1nt+Agh2HOOBl+55HQ==
   dependencies:
     detect-indent "^6.0.0"
     graceful-fs "^4.1.15"
     is-plain-obj "^2.0.0"
     make-dir "^3.0.0"
-    sort-keys "^3.0.0"
+    sort-keys "^4.0.0"
     write-file-atomic "^3.0.0"
 
 write@1.0.3:
