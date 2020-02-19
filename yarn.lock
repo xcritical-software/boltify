@@ -1979,10 +1979,10 @@ binary-extensions@^1.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.13.1.tgz#598afe54755b2868a5330d2aff9d4ebb53209b65"
   integrity sha512-Un7MIEDdUC5gNpcGDV97op1Ywk748MpHcFTHoYs6qnj1Z3j7I53VG3nwZhKzoBZmbdRNnb6WRdFlwl7tSDuZGw==
 
-bolt@^0.23.6:
-  version "0.23.6"
-  resolved "https://registry.yarnpkg.com/bolt/-/bolt-0.23.6.tgz#dc24a985bd38df00274efeb5cfb3b5b63dcf58ce"
-  integrity sha512-s+0upkSqbxdiTYI6LJEqDpzF+Jepam1oUllGjbZz1kUxS4hmbUH5Cc2FsQxCNgiWopkEIz4mAt9kCNvz6bBmyQ==
+bolt@^0.24.4:
+  version "0.24.4"
+  resolved "https://registry.yarnpkg.com/bolt/-/bolt-0.24.4.tgz#0b6080b8dff84415f194e6e3067e9361042f3514"
+  integrity sha512-Y4adoDkT/HtdlGWaMM35qi7JV30dAGCyseNnUvKT5BJVlsBODMOCEkNLTDtKwtyuCuUhWaDdIuLwYQgW8HdMlw==
   dependencies:
     array-includes "^3.0.3"
     babel-runtime "^6.25.0"
