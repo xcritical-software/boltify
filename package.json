@@ -28,7 +28,7 @@
     "columnify": "^1.5.4",
     "conventional-commits-filter": "^2.0.1",
     "conventional-commits-parser": "^3.0.1",
-    "execa": "^2.0.4",
+    "execa": "^4.0.0",
     "lodash": "^4.17.15",
     "meow": "^4.0.0",
     "npmlog": "^4.1.2",
