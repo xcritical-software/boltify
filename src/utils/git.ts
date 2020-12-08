@@ -84,7 +84,7 @@ export async function getTags({ isRevert }: { isRevert: boolean }): Promise<stri
   const execaOpts = ['tag'];
 
   if (isRevert) {
-    execaOpts.push('--sort=-refname');
+    execaOpts.push('--sort=-v:refname');
   }
 
   return (await execa('git', execaOpts)).stdout
