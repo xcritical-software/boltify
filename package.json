@@ -43,7 +43,7 @@
     "@types/meow": "^4.0.0",
     "@types/node": "^13.7.2",
     "@types/npmlog": "^4.1.2",
-    "@types/semver": "^6.0.2",
+    "@types/semver": "^7.3.5",
     "@xcritical/eslint-plugin-xc-front-lint": "^1.0.0",
     "@xcritical/xc-front-libs-utils": "^1.0.0",
     "jest": "^24.9.0",
