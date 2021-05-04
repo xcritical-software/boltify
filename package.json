@@ -34,7 +34,7 @@
     "npmlog": "^4.1.2",
     "p-locate": "^4.1.0",
     "semver": "^6.3.0",
-    "temp-write": "^4.0.0",
+    "temp-write": "^5.0.0",
     "write-json-file": "^4.2.0"
   },
   "devDependencies": {
