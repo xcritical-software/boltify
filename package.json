@@ -41,7 +41,7 @@
     "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.139",
     "@types/meow": "^4.0.0",
-    "@types/node": "^13.7.2",
+    "@types/node": "^15.12.2",
     "@types/npmlog": "^4.1.2",
     "@types/semver": "^6.0.2",
     "@xcritical/eslint-plugin-xc-front-lint": "^1.0.0",
