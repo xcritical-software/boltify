@@ -24,7 +24,7 @@
   "private": false,
   "dependencies": {
     "bolt": "^0.23.6",
-    "chalk": "^2.4.2",
+    "chalk": "^4.1.2",
     "columnify": "^1.5.4",
     "conventional-commits-filter": "^2.0.1",
     "conventional-commits-parser": "^3.0.1",
